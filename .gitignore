@@ -1,0 +1,10 @@
+# Python Stuff
+__pycache__/
+
+
+# Build Folders
+/build/
+
+
+# MacOS Specific
+.DS_Store
