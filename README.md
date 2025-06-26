@@ -45,11 +45,16 @@ __\* Still Approximations \*__
 │       │   ├── properties_panel.cc
 │       │   └── timeline_panel.cc
 │       │
-│       ├── renderer/
+│       ├── render/
 │       │   ├── renderer.hh/.cc
 │       │   ├── camera.hh/.cc
 │       │   ├── viewport.cc
 │       │   └── gizmo.hh/.cc
+│       │
+│       ├── elements/
+│       │   ├── listener.hh/.cc
+│       │   ├── audio_node.hh/.cc
+│       │   └── <future>
 │       │
 │       ├── audio/
 │       │   ├── audio_engine.hh/.cc
@@ -57,6 +62,10 @@ __\* Still Approximations \*__
 │       │   ├── listener.hh/.cc
 │       │   ├── mixer.hh/.cc
 │       │   └── audio_file_loader.hh/.cc
+│       │
+│       ├── window/
+│       │   ├── window.hh/.cc
+│       │   └── iwindow.hh
 │       │
 │       ├── core/
 │       │   ├── scene.hh/.cc
