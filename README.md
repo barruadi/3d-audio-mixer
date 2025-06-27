@@ -7,7 +7,7 @@ will be an open-source 3D audio mixer designed for creators, developers, and mus
 
 | Layer                | Library/Tool           |
 | -------------------- | ---------------------- |
-| UI                   | ImGui                  |
+| UI                   | ImGui / GLAD           |
 | 3D Viewport          | OpenGL                 |
 | Math                 | glm                    |
 | 3D Audio             | FMOD                   |

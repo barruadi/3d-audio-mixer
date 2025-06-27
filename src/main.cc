@@ -1,34 +1,11 @@
-#include <iostream>
-#include <glad/glad.h>
-#include <GLFW/glfw3.h>
+// App Entry Point
 
-int main() {
-    GLFWwindow* window;
+#include "app/application.hh"
 
-    if (!glfwInit()) {
-        return -1;
-    }
-
-    window = glfwCreateWindow(600, 480, "Window", NULL, NULL);
-
-    glClearColor(0.25f, 0.5f, 0.75f, 1.0f);
-    glfwMakeContextCurrent(window);
-
-    if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
-        return -1;
-    }
-
-    while (!glfwWindowShouldClose(window)) {
-
-        glfwPollEvents();
-
-        glClear(GL_COLOR_BUFFER_BIT);
-
-        glfwSwapBuffers(window);
-
-    }
-
-    glfwTerminate();
+int main(void)
+{
+    auto app = std::make_unique<Application>(APP_NAME);
+    app->loop();
 
     return 0;
 }
