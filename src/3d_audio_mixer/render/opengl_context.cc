@@ -26,9 +26,9 @@ namespace nrender
 
     void OpenGL_Context::pre_render()
     {
-        glViewport(0, 0, mWindow->Width, mWindow->Height);
+        // glViewport(0, 0, mWindow->Width, mWindow->Height);
         glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        // glClear(GL_COLOR_BUFFER_BIT);
     }
 
     void OpenGL_Context::post_render()
@@ -39,7 +39,7 @@ namespace nrender
 
     void OpenGL_Context::end()
     {
-        glfwDestroyWindow((GLFWwindow*)mWindow->get_native_window());
+        glfwDestroyWindow((GLFWwindow*) mWindow->get_native_window());
         glfwTerminate();
     }
 } // namespace nrender

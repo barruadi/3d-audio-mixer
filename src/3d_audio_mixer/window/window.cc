@@ -8,6 +8,8 @@ namespace nwindow
         Height = height;
         Title = title;
 
+        mRender->init(this);
+
         return isRunning;
     }
 
