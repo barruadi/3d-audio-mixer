@@ -14,14 +14,14 @@ namespace nwindow
     class Window: public IWindow
     {
         private:
-            GLFWwindow* window;
+            GLFWwindow* mWindow;
 
             bool isRunning;
 
             std::unique_ptr<nrender::OpenGL_Context> mRender;
 
         public:
-            Window(): isRunning(true), window(nullptr)
+            Window(): isRunning(true), mWindow(nullptr)
             {
                 mRender = std::make_unique<nrender::OpenGL_Context>();
             }
@@ -34,11 +34,11 @@ namespace nwindow
 
             bool is_running() { return isRunning; }
 
-            void* get_native_window() override { return window; };
+            void* get_native_window() override { return mWindow; };
 
             void set_native_window(void* window) override
             {
-                window = (GLFWwindow*)window;
+                mWindow = (GLFWwindow*)window;
             }
             
             void on_close() override;

@@ -32,7 +32,7 @@ namespace nwindow
     void Window::handle_input()
     {
         // [TODO]: list keyboard input for shortcut
-        if (glfwGetKey(window, GLFW_KEY_N) == GLFW_PRESS)
+        if (glfwGetKey(mWindow, GLFW_KEY_N) == GLFW_PRESS)
         {
             
         }
