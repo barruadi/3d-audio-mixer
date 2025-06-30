@@ -9,8 +9,16 @@ find_package(OpenGL REQUIRED)
 add_executable(3D_Audio_Mixer
     src/main.cc
     src/3d_audio_mixer/render/opengl_context.cc
+    src/3d_audio_mixer/render/ui_context.cc
     src/3d_audio_mixer/app/application.cc
     src/3d_audio_mixer/window/window.cc
+
+    ${CMAKE_SOURCE_DIR}/dependencies/imgui/imgui.cpp
+    ${CMAKE_SOURCE_DIR}/dependencies/imgui/imgui_draw.cpp
+    ${CMAKE_SOURCE_DIR}/dependencies/imgui/imgui_widgets.cpp
+    ${CMAKE_SOURCE_DIR}/dependencies/imgui/imgui_tables.cpp
+    ${CMAKE_SOURCE_DIR}/dependencies/imgui/backends/imgui_impl_glfw.cpp
+    ${CMAKE_SOURCE_DIR}/dependencies/imgui/backends/imgui_impl_opengl3.cpp
 )
 
 
@@ -21,6 +29,8 @@ endif()
 
 target_include_directories(3D_Audio_Mixer PRIVATE
     ${CMAKE_SOURCE_DIR}/dependencies
+    ${CMAKE_SOURCE_DIR}/dependencies/imgui
+    ${CMAKE_SOURCE_DIR}/dependencies/imgui/backends
     ${CMAKE_SOURCE_DIR}/src/3d_audio_mixer
 )
 
