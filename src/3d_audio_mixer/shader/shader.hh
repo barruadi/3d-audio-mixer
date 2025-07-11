@@ -15,5 +15,5 @@ namespace nshader
             void use();
 
             void unload();
-    }
+    };
 } // namespace nshader
