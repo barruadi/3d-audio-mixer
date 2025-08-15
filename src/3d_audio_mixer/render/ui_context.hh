@@ -14,5 +14,5 @@ namespace nrender
             void post_render() override;
 
             void end() override;
-    }
+    };
 } // namespace nrender

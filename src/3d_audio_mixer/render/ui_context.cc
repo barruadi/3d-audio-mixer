@@ -12,7 +12,7 @@ namespace nrender
 
         IMGUI_CHECKVERSION();
         ImGui::CreateContext();
-        const char* glsl_version = (const char*)glGetString(GL_SHADING_LANGUAGE_VERSION);
+        const char* glsl_version = "#version 150";
 
         ImGuiIO& io = ImGui::GetIO(); (void)io;
         io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;       // Enable Keyboard Controls

@@ -2,6 +2,7 @@
 
 #include "window/iwindow.hh"
 #include "render/opengl_context.hh"
+#include "render/ui_context.hh"
 
 #include <GLFW/glfw3.h>
 
@@ -44,5 +45,9 @@ namespace nwindow
             void on_close() override;
 
             void on_key(int key, int scancode, int action, int mods) override;
+
+            void on_resize(int width, int height) override;
+
+            void on_scroll(double delta) override;
     };
 }

@@ -48,4 +48,16 @@ namespace nwindow
 
     }
 
+    void Window::on_resize(int width, int height)
+    {
+        Width = width;
+        Height = height;
+
+        render();
+    }
+
+    void Window::on_scroll(double delta)
+    {
+
+    }
 } // namespace nwindow
