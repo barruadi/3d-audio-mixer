@@ -8,6 +8,8 @@ find_package(OpenGL REQUIRED)
 
 add_executable(3D_Audio_Mixer
     src/main.cc
+    src/glad.c
+    
     src/3d_audio_mixer/render/opengl_context.cc
     src/3d_audio_mixer/render/ui_context.cc
     src/3d_audio_mixer/app/application.cc
