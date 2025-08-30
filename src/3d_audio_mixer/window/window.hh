@@ -8,6 +8,7 @@
 
 namespace nrender {
     class OpenGL_Context;
+    class UI_Context;
 }
 
 namespace nwindow
@@ -20,14 +21,16 @@ namespace nwindow
             bool isRunning;
 
             std::unique_ptr<nrender::OpenGL_Context> mRender;
+            std::unique_ptr<nrender::UI_Context> mUI;
 
         public:
             Window(): isRunning(true), mWindow(nullptr)
             {
                 mRender = std::make_unique<nrender::OpenGL_Context>();
+                mUI = std::make_unique<nrender::UI_Context>();
             }
 
-            bool init(int width, int heigth, const std::string& title);
+            bool init(int width, int height, const std::string& title);
 
             void render();
 
