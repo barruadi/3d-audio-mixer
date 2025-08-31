@@ -44,7 +44,9 @@ namespace nelement
                 update_projection_matrix();
             }
 
-            void update(const glm::vec3& position, float fov, float aspect, float near, float far)
+            ~Camera() = default;
+
+            void update_self(const glm::vec3& position, float fov, float aspect, float near, float far)
             {
                 mPosition = position;
                 mFov = fov;
@@ -54,6 +56,11 @@ namespace nelement
 
                 update_view_matrix();
                 update_projection_matrix();
+            }
+
+            void update()
+            {
+                
             }
 
             void on_mouse_wheel(double delta)
