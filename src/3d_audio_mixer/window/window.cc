@@ -9,6 +9,9 @@ namespace nwindow
         Title = title;
 
         mRender->init(this);
+        mUI->init(this);
+
+        mMenuPanel = std::make_unique<nui::MenuPanel>();
 
         return isRunning;
     }
@@ -17,11 +20,13 @@ namespace nwindow
     {
         // Pre-Render
         mRender->pre_render();
+        mUI->pre_render();
 
         // Render 
-        
+        mMenuPanel->render();
         
         // Post-Render
+        mUI->post_render();
         mRender->post_render();
 
 

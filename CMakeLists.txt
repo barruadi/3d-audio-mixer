@@ -10,10 +10,14 @@ add_executable(3D_Audio_Mixer
     src/main.cc
     src/glad.c
     
+    # main
     src/3d_audio_mixer/render/opengl_context.cc
     src/3d_audio_mixer/render/ui_context.cc
     src/3d_audio_mixer/app/application.cc
     src/3d_audio_mixer/window/window.cc
+
+    # panels
+    src/3d_audio_mixer/ui/menu_panel.cc
 
     ${CMAKE_SOURCE_DIR}/dependencies/imgui/imgui.cpp
     ${CMAKE_SOURCE_DIR}/dependencies/imgui/imgui_draw.cpp

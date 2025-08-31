@@ -35,6 +35,7 @@ namespace nutils
 
             bool load_camera(std::shared_ptr<nelement::Camera>* camera)
             {
+                *camera = std::make_shared<nelement::Camera>();
                 if (!data.contains("camera") || !data["camera"].is_object()) return false;
 
                 const auto& jcam = data["camera"];
@@ -49,7 +50,7 @@ namespace nutils
                 float near   = jcam.value("near", 0.1f);
                 float far    = jcam.value("far", 100.0f);
 
-                (*camera)->update(glm::vec3(px, py, pz), fov, aspect, near, far);
+                (*camera)->update_self(glm::vec3(px, py, pz), fov, aspect, near, far);
 
                 return true;
             }
@@ -58,7 +59,7 @@ namespace nutils
             {
                 sound_nodes->clear();
                 
-                if (!data.contains("sound_node") || !data["sound_node"].is_object()) return false;
+                if (!data.contains("nodes") || !data["nodes"].is_array()) return false;
                 const auto& jnodes = data.value("nodes", nlohmann::json::array());
 
                 for (const auto& n : jnodes)
@@ -83,6 +84,7 @@ namespace nutils
 
                     sound_nodes->push_back(sn);
                 }
+                return !sound_nodes->empty();
             }
     };
 } // namespace nutils

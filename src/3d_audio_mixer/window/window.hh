@@ -4,6 +4,8 @@
 #include "render/opengl_context.hh"
 #include "render/ui_context.hh"
 
+#include "ui/menu_panel.hh"
+
 #include <GLFW/glfw3.h>
 
 namespace nrender {
@@ -22,6 +24,9 @@ namespace nwindow
 
             std::unique_ptr<nrender::OpenGL_Context> mRender;
             std::unique_ptr<nrender::UI_Context> mUI;
+
+            // UIs
+            std::unique_ptr<nui::MenuPanel> mMenuPanel;
 
         public:
             Window(): isRunning(true), mWindow(nullptr)
