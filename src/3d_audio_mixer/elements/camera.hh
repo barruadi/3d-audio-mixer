@@ -42,9 +42,16 @@ namespace nelement
                 mFar = far;
             }
 
-            void update()
+            void update(const glm::vec3& position, float fov, float aspect, float near, float far)
             {
+                mPosition = position;
+                mFov = fov;
+                mAspect = aspect;
+                mNear = near;
+                mFar = far;
 
+                update_view_matrix();
+                update_projection_matrix();
             }
 
             void on_mouse_wheel(double delta)
@@ -119,6 +126,11 @@ namespace nelement
             glm::vec3 get_right() const
             {
                 return get_direction() * cRight;
+            }
+
+            glm::vec3* get_position_ptr()
+            {
+                return &mPosition;
             }
     };
 } // namespace nelement
