@@ -33,13 +33,15 @@ namespace nelement
             const float cRotationSpeed = 2.0f;
 
         public:
-            Camera(const glm::vec3& position, float fov, float aspect, float near, float far)
+            Camera():
+                mFov(45.0f),
+                mNear(0.1f),
+                mFar(100.0f),
+                mPitch(0.0f),
+                mYaw(0.0f)
             {
-                mPosition = position;
-                mFov = fov;
-                mAspect = aspect;
-                mNear = near;
-                mFar = far;
+                update_view_matrix();
+                update_projection_matrix();
             }
 
             void update(const glm::vec3& position, float fov, float aspect, float near, float far)
