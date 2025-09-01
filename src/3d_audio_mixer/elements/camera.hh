@@ -1,3 +1,5 @@
+#pragma once
+
 #include "app/pch.h"
 
 #include "elements/element.hh"
@@ -33,13 +35,29 @@ namespace nelement
             const float cRotationSpeed = 2.0f;
 
         public:
-            Camera(const glm::vec3& position, float fov, float aspect, float near, float far)
+            Camera():
+                mFov(45.0f),
+                mNear(0.1f),
+                mFar(100.0f),
+                mPitch(0.0f),
+                mYaw(0.0f)
+            {
+                update_view_matrix();
+                update_projection_matrix();
+            }
+
+            ~Camera() = default;
+
+            void update_self(const glm::vec3& position, float fov, float aspect, float near, float far)
             {
                 mPosition = position;
                 mFov = fov;
                 mAspect = aspect;
                 mNear = near;
                 mFar = far;
+
+                update_view_matrix();
+                update_projection_matrix();
             }
 
             void update()
@@ -101,6 +119,16 @@ namespace nelement
             }
 
             // Getter - Setter
+            glm::mat4 get_view_matrix() const
+            {
+                return mViewMatrix;
+            }
+
+            glm::mat4 get_projection_matrix() const
+            {
+                return mProjection;
+            }
+
             glm::quat get_direction() const
             {
                 return glm::quat(glm::vec3(-mPitch, -mYaw, 0.0f));
@@ -119,6 +147,11 @@ namespace nelement
             glm::vec3 get_right() const
             {
                 return get_direction() * cRight;
+            }
+
+            glm::vec3 get_position() const
+            {
+                return mPosition;
             }
     };
 } // namespace nelement
