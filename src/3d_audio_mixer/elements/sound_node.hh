@@ -20,7 +20,12 @@ namespace nelement
 
             }
 
-            void update(const std::string& file, const glm::vec3& position, float volume, float pan)
+            virtual void render();
+
+            void update(const std::string& file, 
+                        const glm::vec3& position, 
+                        float volume, 
+                        float pan)
             {
                 mFile = file;
                 mPosition = position;

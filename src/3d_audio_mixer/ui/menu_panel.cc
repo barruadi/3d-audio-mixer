@@ -42,6 +42,11 @@ namespace nui
                     std::cout << "[LOAD ERROR] Failed to load sound nodes." << std::endl;
                     return;
                 }
+
+                if (mSceneLoaderCallback)
+                {
+                    mSceneLoaderCallback(selectedFile);
+                }
             }
             mFileDialog.ClearSelected();
         }

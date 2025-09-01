@@ -60,7 +60,7 @@ namespace nelement
 
             void update()
             {
-                
+
             }
 
             void on_mouse_wheel(double delta)
@@ -117,6 +117,16 @@ namespace nelement
             }
 
             // Getter - Setter
+            glm::mat4 get_view_matrix() const
+            {
+                return mViewMatrix;
+            }
+
+            glm::mat4 get_projection_matrix() const
+            {
+                return mProjection;
+            }
+
             glm::quat get_direction() const
             {
                 return glm::quat(glm::vec3(-mPitch, -mYaw, 0.0f));
@@ -137,9 +147,9 @@ namespace nelement
                 return get_direction() * cRight;
             }
 
-            glm::vec3* get_position_ptr()
+            glm::vec3 get_position() const
             {
-                return &mPosition;
+                return mPosition;
             }
     };
 } // namespace nelement

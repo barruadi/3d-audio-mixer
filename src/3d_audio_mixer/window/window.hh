@@ -5,6 +5,7 @@
 #include "render/ui_context.hh"
 
 #include "ui/menu_panel.hh"
+#include "ui/scene_view.hh"
 
 #include <GLFW/glfw3.h>
 
@@ -27,6 +28,7 @@ namespace nwindow
 
             // UIs
             std::unique_ptr<nui::MenuPanel> mMenuPanel;
+            std::unique_ptr<nui::SceneView> mSceneView;
 
         public:
             Window(): isRunning(true), mWindow(nullptr)

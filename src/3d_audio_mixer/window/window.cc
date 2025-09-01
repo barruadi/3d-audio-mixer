@@ -12,6 +12,12 @@ namespace nwindow
         mUI->init(this);
 
         mMenuPanel = std::make_unique<nui::MenuPanel>();
+        mSceneView = std::make_unique<nui::SceneView>();
+
+        // Set the scene loader callback
+        mMenuPanel->set_scene_loader_callback([this](const std::string& path) {
+            mSceneView->load_scene(path);
+        });
 
         return isRunning;
     }
@@ -24,7 +30,8 @@ namespace nwindow
 
         // Render 
         mMenuPanel->render();
-        
+        mSceneView->render();
+
         // Post-Render
         mUI->post_render();
         mRender->post_render();
