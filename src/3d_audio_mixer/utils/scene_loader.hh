@@ -81,6 +81,7 @@ namespace nutils
 
                     // set values
                     sn->update(file, glm::vec3(x, y, z), volume, pan);
+                    sn->init();
 
                     sound_nodes->push_back(sn);
                 }

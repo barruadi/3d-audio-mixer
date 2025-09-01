@@ -61,6 +61,7 @@
         "unordered_set": "cpp",
         "__availability": "cpp",
         "atomic": "cpp",
-        "*.in": "cpp"
+        "*.in": "cpp",
+        "numeric": "cpp"
     }
 }

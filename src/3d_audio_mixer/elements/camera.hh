@@ -65,6 +65,11 @@ namespace nelement
 
             }
 
+            void set_aspect(float aspect)
+            {
+                mProjection = glm::perspective(mFov, aspect, mNear, mFar);
+            }
+
             void on_mouse_wheel(double delta)
             {
                 mDistance -= static_cast<float>(delta) * cRotationSpeed;

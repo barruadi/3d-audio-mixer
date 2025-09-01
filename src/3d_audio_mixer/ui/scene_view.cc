@@ -8,27 +8,29 @@ namespace nui
     void SceneView::render()
     {
 
-        // if (mIsLoaded)
-        // {
-        //     for (auto& n : mSoundNodes)
-        //     {
-        //         n->render();
-        //     }
-        // }
+        // initalizer
+        mFrameBuffer->bind();
+        if (mIsLoaded)
+        {
+            for (auto& n : mSoundNodes)
+            {
+                n->render();
+            }
+        }
+        mFrameBuffer->unbind();
 
         ImGui::Begin("Scene");
 
         if (mIsLoaded)
         {
-            ImGui::Text("Camera Position: (%.2f, %.2f, %.2f)", 
-                        mCamera->get_position().x, 
-                        mCamera->get_position().y, 
-                        mCamera->get_position().z);
-            ImGui::Text("Number of Sound Nodes: %zu", mSoundNodes.size());
-        }
-        else
-        {
-            ImGui::Text("No scene loaded.");
+            ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
+            mCamera->set_aspect(viewportPanelSize.x / viewportPanelSize.y);
+            mCamera->update();
+            
+
+            // show rendered
+            uint64_t textureID = mFrameBuffer->get_texture_id();
+            ImGui::Image(reinterpret_cast<void*>(textureID), ImVec2(-1, -1));
         }
 
         ImGui::End();

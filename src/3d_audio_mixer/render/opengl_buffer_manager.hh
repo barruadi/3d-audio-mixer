@@ -16,7 +16,7 @@ namespace nrender
 
             void unbind() override;
 
-            uint32_t get_texture_id()
+            uint32_t get_texture_id() override
             {
                 return mTextureId;
             }

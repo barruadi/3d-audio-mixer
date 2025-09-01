@@ -1,5 +1,7 @@
 #pragma once
 
+#include "render/opengl_buffer_manager.hh"
+
 namespace nelement
 {
     class SoundNode
@@ -12,6 +14,8 @@ namespace nelement
             float mVolume;
             float mPan;
 
+            std::shared_ptr<nrender::OpenGL_VertexIndexBuffer> mVertexBuffer;
+
         public:
             SoundNode():
                 mFile(""),
@@ -22,9 +26,15 @@ namespace nelement
 
             }
 
+            void init()
+            {
+                mVertexBuffer = std::make_shared<nrender::OpenGL_VertexIndexBuffer>();
+                create_buffer();
+            }
+
             virtual void render()
             {
-
+                mVertexBuffer->draw();
             }
 
             void update(const std::string& file, 
@@ -36,6 +46,11 @@ namespace nelement
                 mPosition = position;
                 mVolume = volume;
                 mPan = pan;
+            }
+
+            void create_buffer()
+            {
+                mVertexBuffer->create_buffers(mPosition);
             }
     };
 } // namespace nelement

@@ -11,6 +11,7 @@ add_executable(3D_Audio_Mixer
     src/glad.c
     
     # main
+    src/3d_audio_mixer/render/opengl_buffer_manager.cc
     src/3d_audio_mixer/render/opengl_context.cc
     src/3d_audio_mixer/render/ui_context.cc
     src/3d_audio_mixer/app/application.cc
