@@ -21,4 +21,23 @@ namespace nrender
                 return mTextureId;
             }
     };
+
+    class OpenGL_VertexIndexBuffer : public VertexIndexBuffer
+    {
+        public:
+            OpenGL_VertexIndexBuffer(): VertexIndexBuffer()
+            {
+
+            }
+
+            void create_buffers(const glm::vec3& nodePosition) override;
+
+            void delete_buffers() override;
+
+            void bind() override;
+
+            void unbind() override;
+
+            void draw() override;
+    };
 } // namespace nrender

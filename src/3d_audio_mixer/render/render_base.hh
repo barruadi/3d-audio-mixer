@@ -1,6 +1,7 @@
 #pragma once
 
 #include "window/iwindow.hh"
+#include <glad/glad.h>
 
 namespace nrender
 {
@@ -50,5 +51,32 @@ namespace nrender
             virtual void unbind() = 0;
 
             virtual uint32_t get_texture_id() = 0;
+    };
+
+    class VertexIndexBuffer
+    {
+        protected:
+            GLuint mVBO;
+            GLuint mVAO;
+
+        public:
+            VertexIndexBuffer():
+                mVBO{0}, mVAO{0}
+            {
+
+            }
+
+            virtual ~VertexIndexBuffer() = default;
+
+            virtual void create_buffers(const glm::vec3& nodePosition) = 0;
+
+            virtual void delete_buffers() = 0;
+
+            virtual void bind() = 0;
+
+            virtual void unbind() = 0;
+
+            virtual void draw() = 0;
+
     };
 } // namespace nrender
