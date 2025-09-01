@@ -1,5 +1,8 @@
 #pragma once
 
+#include "elements/camera.hh"
+#include "elements/sound_node.hh"
+
 #include "app/pch.h"
 #include <imgui/imgui.h>
 #include <ImGuiFileBrowser/ImFileBrowser.h>
@@ -10,7 +13,8 @@ namespace nui
     {
         private:
             ImGui::FileBrowser mFileDialog;
-            std::function<void(const std::string&)> mSceneLoaderCallback;
+            std::function<void(const std::shared_ptr<nelement::Camera>& camera,
+                const std::vector<std::shared_ptr<nelement::SoundNode>>& soundNodes)> mSceneLoaderCallback;
 
         public:
             MenuPanel()
@@ -19,7 +23,10 @@ namespace nui
                 mFileDialog.SetFileFilters({ ".json" });
             }
 
-            void set_scene_loader_callback(const std::function<void(const std::string&)>& callback)
+            // [TODO]: refactor to filepath for scalability
+            void set_scene_loader_callback(const std::function<void(
+                const std::shared_ptr<nelement::Camera>& camera,
+                const std::vector<std::shared_ptr<nelement::SoundNode>>& soundNodes)>& callback)
             {
                 mSceneLoaderCallback = callback;
             }

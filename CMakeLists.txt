@@ -18,6 +18,7 @@ add_executable(3D_Audio_Mixer
 
     # panels
     src/3d_audio_mixer/ui/menu_panel.cc
+    src/3d_audio_mixer/ui/scene_view.cc
 
     ${CMAKE_SOURCE_DIR}/dependencies/imgui/imgui.cpp
     ${CMAKE_SOURCE_DIR}/dependencies/imgui/imgui_draw.cpp

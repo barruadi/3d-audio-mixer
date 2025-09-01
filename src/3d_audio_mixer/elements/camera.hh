@@ -1,3 +1,5 @@
+#pragma once
+
 #include "app/pch.h"
 
 #include "elements/element.hh"

@@ -1,3 +1,5 @@
+#pragma once
+
 namespace nelement
 {
     class SoundNode
@@ -20,7 +22,10 @@ namespace nelement
 
             }
 
-            virtual void render();
+            virtual void render()
+            {
+
+            }
 
             void update(const std::string& file, 
                         const glm::vec3& position, 

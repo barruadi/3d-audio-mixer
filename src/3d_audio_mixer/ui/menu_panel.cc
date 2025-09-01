@@ -45,7 +45,7 @@ namespace nui
 
                 if (mSceneLoaderCallback)
                 {
-                    mSceneLoaderCallback(selectedFile);
+                    mSceneLoaderCallback(camera, soundNodes);
                 }
             }
             mFileDialog.ClearSelected();

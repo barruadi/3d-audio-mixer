@@ -15,8 +15,19 @@ namespace nwindow
         mSceneView = std::make_unique<nui::SceneView>();
 
         // Set the scene loader callback
-        mMenuPanel->set_scene_loader_callback([this](const std::string& path) {
-            mSceneView->load_scene(path);
+        // [TODO]: cleanup and fix pointer issue
+        mMenuPanel->set_scene_loader_callback([this](
+            const std::shared_ptr<nelement::Camera>& camera,
+            const std::vector<std::shared_ptr<nelement::SoundNode>>& soundNodes) 
+        {
+            std::vector<std::unique_ptr<nelement::SoundNode>> uniqueSoundNodes;
+            for (const auto& soundNode : soundNodes) {
+                uniqueSoundNodes.push_back(std::make_unique<nelement::SoundNode>(*soundNode));
+            }
+            mSceneView->set_scene(
+                std::make_unique<nelement::Camera>(*camera),
+                std::move(uniqueSoundNodes)
+            );
         });
 
         return isRunning;
