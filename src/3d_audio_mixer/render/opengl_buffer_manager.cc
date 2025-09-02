@@ -81,7 +81,7 @@ namespace nrender
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
     }
 
-    void OpenGL_VertexIndexBuffer::create_buffers(const glm::vec3& nodePosition)
+    void OpenGL_VertexIndexBuffer::create_buffers(const std::vector<glm::vec3>& nodePosition)
     {
         glGenVertexArrays(1, &mVAO);
         glGenBuffers(1, &mVBO);
@@ -89,7 +89,8 @@ namespace nrender
         glBindVertexArray(mVAO);
 
         glBindBuffer(GL_ARRAY_BUFFER, mVBO);
-        glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec3), &nodePosition, GL_DYNAMIC_DRAW);
+        glBufferData(GL_ARRAY_BUFFER, nodePosition.size() * sizeof(glm::vec3), 
+                     nodePosition.data(), GL_DYNAMIC_DRAW);
 
         glEnableVertexAttribArray(0); // location = 0 : position
         glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(glm::vec3), (void*)0);
@@ -127,6 +128,15 @@ namespace nrender
         bind();
 
         glDrawArrays(GL_POINTS, 0, 1);
+
+        unbind();
+    }
+
+    void OpenGL_VertexIndexBuffer::draw_line()
+    {
+        bind();
+
+        glDrawArrays(GL_LINES, 0, 6);
 
         unbind();
     }

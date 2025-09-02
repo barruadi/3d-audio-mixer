@@ -13,6 +13,8 @@ namespace nui
         mFrameBuffer->bind();
         if (mIsLoaded)
         {
+            mGrid->render();
+
             for (auto& n : mSoundNodes)
             {
                 n->update(mShader.get());
@@ -50,6 +52,11 @@ namespace nui
     {
         // [TODO]: implement scene loading from JSON
         return false;
+    }
+
+    void SceneView::draw_grid()
+    {
+
     }
 
     // Scene Controls

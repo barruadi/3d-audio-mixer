@@ -2,6 +2,7 @@
 
 #include "elements/sound_node.hh"
 #include "elements/camera.hh"
+#include "elements/grid.hh"
 #include "render/opengl_buffer_manager.hh"
 #include "shader/shader.hh"
 #include <vector>
@@ -15,6 +16,7 @@ namespace nui
             bool mIsLoaded;
 
             // Scene objects
+            std::unique_ptr<nelement::Grid> mGrid;
             std::unique_ptr<nelement::Camera> mCamera;
             std::vector<std::unique_ptr<nelement::SoundNode>> mSoundNodes;
             
@@ -30,6 +32,7 @@ namespace nui
                 mCamera(nullptr),
                 mSoundNodes()
             {
+                mGrid = std::make_unique<nelement::Grid>();
                 mCamera = std::make_unique<nelement::Camera>();
                 mFrameBuffer = std::make_unique<nrender::OpenGL_FrameBuffer>();
                 mFrameBuffer->create_buffers(800, 600);
@@ -63,6 +66,9 @@ namespace nui
                 mCamera = nullptr;
                 mSoundNodes.clear();
             }
+
+            // Utils
+            void draw_grid();
 
             // Scene Controls
             void on_mouse_move(double x, double y, nelement::EInputButton button);

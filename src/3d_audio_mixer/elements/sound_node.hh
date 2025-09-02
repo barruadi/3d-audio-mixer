@@ -56,7 +56,8 @@ namespace nelement
 
             void create_buffer()
             {
-                mVertexBuffer->create_buffers(mPosition);
+                std::vector<glm::vec3> positions = {mPosition};
+                mVertexBuffer->create_buffers(positions);
             }
     };
 } // namespace nelement

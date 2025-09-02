@@ -30,7 +30,7 @@ namespace nrender
 
             }
 
-            void create_buffers(const glm::vec3& nodePosition) override;
+            void create_buffers(const std::vector<glm::vec3>& nodePosition) override;
 
             void delete_buffers() override;
 
@@ -39,5 +39,7 @@ namespace nrender
             void unbind() override;
 
             void draw() override;
+
+            void draw_line();
     };
 } // namespace nrender

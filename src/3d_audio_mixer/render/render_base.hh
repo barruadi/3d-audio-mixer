@@ -3,6 +3,7 @@
 #include "app/pch.h"
 #include "window/iwindow.hh"
 #include <glad/glad.h>
+#include <vector>
 
 namespace nrender
 {
@@ -69,7 +70,7 @@ namespace nrender
 
             virtual ~VertexIndexBuffer() = default;
 
-            virtual void create_buffers(const glm::vec3& nodePosition) = 0;
+            virtual void create_buffers(const std::vector<glm::vec3>& nodePosition) = 0;
 
             virtual void delete_buffers() = 0;
 
