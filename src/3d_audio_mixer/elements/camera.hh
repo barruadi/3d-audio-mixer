@@ -60,9 +60,16 @@ namespace nelement
                 update_projection_matrix();
             }
 
-            void update()
+            void update(nshader::Shader* shader)
             {
+                shader->set_mat4(mProjection, "uProj");
+                shader->set_mat4(mViewMatrix, "uView");
+                shader->set_vec3(mPosition, "aPos");
+            }
 
+            void set_aspect(float aspect)
+            {
+                mProjection = glm::perspective(mFov, aspect, mNear, mFar);
             }
 
             void on_mouse_wheel(double delta)
@@ -87,7 +94,7 @@ namespace nelement
                 }	
                 else if (button == EInputButton::Middle)
                 {
-                    // TODO: Adjust pan speed for distance
+                    // [TODO]: Adjust pan speed for distance
                     glm::vec2 delta = (pos2d - mCurrentPos2d) * 0.003f;
 
                     mFocus += -get_right() * delta.x * mDistance;

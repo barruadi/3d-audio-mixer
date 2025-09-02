@@ -41,7 +41,7 @@ namespace nutils
                 const auto& jcam = data["camera"];
 
                 float px = 0, py = 0, pz = 5;
-                read_vec3(jcam.value("position", nlohmann::json::array({0.0f, 0.0f, 5.0f})),
+                read_vec3(jcam.value("position", nlohmann::json::array({0.0f, 0.0f, 3.0f})),
                     px, py, pz
                 );
 
@@ -80,7 +80,8 @@ namespace nutils
                     auto sn = std::make_shared<nelement::SoundNode>();
 
                     // set values
-                    sn->update(file, glm::vec3(x, y, z), volume, pan);
+                    sn->self_update(file, glm::vec3(x, y, z), volume, pan);
+                    sn->init();
 
                     sound_nodes->push_back(sn);
                 }
