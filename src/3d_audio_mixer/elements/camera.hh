@@ -94,7 +94,7 @@ namespace nelement
                 }	
                 else if (button == EInputButton::Middle)
                 {
-                    // TODO: Adjust pan speed for distance
+                    // [TODO]: Adjust pan speed for distance
                     glm::vec2 delta = (pos2d - mCurrentPos2d) * 0.003f;
 
                     mFocus += -get_right() * delta.x * mDistance;

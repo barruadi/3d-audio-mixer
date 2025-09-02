@@ -59,6 +59,10 @@ namespace nwindow
         {
             
         }
+
+        double x, y;
+        glfwGetCursorPos(mWindow, &x, &y);
+        mSceneView->on_mouse_move(x, y, nelement::Input::get_mouse_button(mWindow));
     }
 
     void Window::on_close() 
@@ -82,6 +86,6 @@ namespace nwindow
 
     void Window::on_scroll(double delta)
     {
-
+        mSceneView->on_mouse_wheel(delta);
     }
 } // namespace nwindow

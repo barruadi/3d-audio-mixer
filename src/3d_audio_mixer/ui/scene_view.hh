@@ -63,5 +63,9 @@ namespace nui
                 mCamera = nullptr;
                 mSoundNodes.clear();
             }
+
+            // Scene Controls
+            void on_mouse_move(double x, double y, nelement::EInputButton button);
+            void on_mouse_wheel(double delta);
     };
 } // namespace nui

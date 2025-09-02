@@ -51,4 +51,21 @@ namespace nui
         // [TODO]: implement scene loading from JSON
         return false;
     }
+
+    // Scene Controls
+    void SceneView::on_mouse_move(double x, double y, nelement::EInputButton button)
+    {
+        if (mCamera)
+        {
+            mCamera->on_mouse_move(x, y, button);
+        }
+    }
+
+    void SceneView::on_mouse_wheel(double delta)
+    {
+        if (mCamera)
+        {
+            mCamera->on_mouse_wheel(delta);
+        }
+    }
 } // namespace nui
