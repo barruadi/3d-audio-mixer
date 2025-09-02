@@ -3,6 +3,7 @@
 #include "elements/sound_node.hh"
 #include "elements/camera.hh"
 #include "render/opengl_buffer_manager.hh"
+#include "shader/shader.hh"
 #include <vector>
 #include <nlohmann/json.hpp>
 
@@ -20,6 +21,9 @@ namespace nui
             // framebuffer
             std::unique_ptr<nrender::OpenGL_FrameBuffer> mFrameBuffer;
 
+            // shader
+            std::unique_ptr<nshader::Shader> mShader;
+
         public:
             SceneView():
                 mIsLoaded(false),
@@ -28,6 +32,10 @@ namespace nui
             {
                 mCamera = std::make_unique<nelement::Camera>();
                 mFrameBuffer = std::make_unique<nrender::OpenGL_FrameBuffer>();
+                mFrameBuffer->create_buffers(800, 600);
+
+                mShader = std::make_unique<nshader::Shader>();
+                mShader->load("shaders/node_vert.shader", "shaders/node_frag.shader");
             }
 
             ~SceneView()
@@ -36,6 +44,8 @@ namespace nui
             }
 
             void render();
+
+            void resize(int32_t width, int32_t height);
 
             // [TODO]: make universal in case of other format
             bool load_scene(nlohmann::json data);

@@ -76,6 +76,7 @@ namespace nwindow
         Width = width;
         Height = height;
 
+        if (mSceneView) mSceneView->resize(width, height);
         render();
     }
 

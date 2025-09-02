@@ -1,10 +1,11 @@
 #pragma once
 
 #include "render/opengl_buffer_manager.hh"
+#include "elements/element.hh"
 
 namespace nelement
 {
-    class SoundNode
+    class SoundNode: public Element
     {
         private:
             std::string mFile;
@@ -37,7 +38,12 @@ namespace nelement
                 mVertexBuffer->draw();
             }
 
-            void update(const std::string& file, 
+            void update(nshader::Shader* shader)
+            {
+                // shader->use();
+            }
+
+            void self_update(const std::string& file, 
                         const glm::vec3& position, 
                         float volume, 
                         float pan)
