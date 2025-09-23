@@ -40,6 +40,7 @@ target_include_directories(3D_Audio_Mixer PRIVATE
     ${CMAKE_SOURCE_DIR}/dependencies
     ${CMAKE_SOURCE_DIR}/dependencies/imgui
     ${CMAKE_SOURCE_DIR}/dependencies/imgui/backends
+    ${CMAKE_SOURCE_DIR}/dependencies/MiniAudio
     ${CMAKE_SOURCE_DIR}/src/3d_audio_mixer
 )
 
