@@ -7,8 +7,11 @@ namespace naudio
         ma_result result = ma_engine_init(NULL, &mEngine);
         if (result != MA_SUCCESS) 
         {
+            std::cerr << "[ERROR] Failed to initialize audio engine." << std::endl;
             return false;
         }
+        std::cout << "[INFO] Audio engine initialized successfully." << std::endl;
+        std::cout << "[INFO] Audio engine pointer: " << &mEngine << std::endl;
         return true;
     }
 
