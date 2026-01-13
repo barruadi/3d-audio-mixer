@@ -6,6 +6,9 @@
 
 #include "ui/menu_panel.hh"
 #include "ui/scene_view.hh"
+#include "ui/node_info.hh"
+
+#include "audio/audio_context.hh"
 
 #include <GLFW/glfw3.h>
 
@@ -29,12 +32,16 @@ namespace nwindow
             // UIs
             std::unique_ptr<nui::MenuPanel> mMenuPanel;
             std::unique_ptr<nui::SceneView> mSceneView;
+            std::unique_ptr<nui::NodeInfo> mNodeInfo;
+
+            std::shared_ptr<naudio::AudioContext> mAudioContext;
 
         public:
             Window(): isRunning(true), mWindow(nullptr)
             {
                 mRender = std::make_unique<nrender::OpenGL_Context>();
                 mUI = std::make_unique<nrender::UI_Context>();
+                mAudioContext = std::make_shared<naudio::AudioContext>();
             }
 
             bool init(int width, int height, const std::string& title);

@@ -73,5 +73,13 @@ namespace nui
             // Scene Controls
             void on_mouse_move(double x, double y, nelement::EInputButton button);
             void on_mouse_wheel(double delta);
+
+            nelement::SoundNode* get_random_node()
+            {
+                if (mSoundNodes.empty()) return nullptr;
+
+                // For simplicity, return the first node
+                return mSoundNodes[0].get();
+            }
     };
 } // namespace nui

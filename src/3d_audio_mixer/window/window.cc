@@ -1,4 +1,5 @@
 #include "window/window.hh"
+#include "utils/services.hh"
 
 namespace nwindow
 {
@@ -10,9 +11,13 @@ namespace nwindow
 
         mRender->init(this);
         mUI->init(this);
+        mAudioContext->init();
+        
+        naudio::Services::instance().sAudioContext = mAudioContext;
 
         mMenuPanel = std::make_unique<nui::MenuPanel>();
         mSceneView = std::make_unique<nui::SceneView>();
+        mNodeInfo = std::make_unique<nui::NodeInfo>();
 
         // Set the scene loader callback
         // [TODO]: cleanup and fix pointer issue
@@ -42,6 +47,7 @@ namespace nwindow
         // Render 
         mMenuPanel->render();
         mSceneView->render();
+        mNodeInfo->render();
 
         // Post-Render
         mUI->post_render();
@@ -57,7 +63,9 @@ namespace nwindow
         // [TODO]: list keyboard input for shortcut
         if (glfwGetKey(mWindow, GLFW_KEY_N) == GLFW_PRESS)
         {
-            
+            // Select random node for testing
+            auto randomNode = mSceneView->get_random_node();
+            mNodeInfo->set_current_node(randomNode);
         }
 
         double x, y;
