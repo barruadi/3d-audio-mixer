@@ -2,6 +2,7 @@
 
 #include <miniaudio.h>
 #include <unordered_map>
+#include <memory>
 
 #include "app/pch.h"
 
@@ -13,13 +14,28 @@ namespace naudio
         std::string filePath;
         bool isLoaded;
         bool isPlaying;
+
+        SoundData() : isLoaded(false), isPlaying(false) {}
+        ~SoundData()
+        {
+            if (isLoaded)
+            {
+                ma_sound_uninit(&sound);
+            }
+        }
+
+        // Prevent copying/moving (ma_sound can't be safely moved)
+        SoundData(const SoundData&) = delete;
+        SoundData& operator=(const SoundData&) = delete;
+        SoundData(SoundData&&) = delete;
+        SoundData& operator=(SoundData&&) = delete;
     };
 
     class AudioSystem
     {
         private:
             ma_engine* mEngine;
-            std::unordered_map<int, SoundData> mSounds;
+            std::unordered_map<int, std::unique_ptr<SoundData>> mSounds;
             int mNextSoundId;
 
         public:

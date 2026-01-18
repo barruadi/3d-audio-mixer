@@ -25,9 +25,9 @@ namespace naudio
     {
         for (auto& [id, soundData] : mSounds)
         {
-            if (soundData.isLoaded)
+            if (soundData && soundData->isLoaded)
             {
-                ma_sound_set_position(&soundData.sound, position.x, position.y, position.z);
+                ma_sound_set_position(&soundData->sound, position.x, position.y, position.z);
             }
         }
     }
@@ -49,17 +49,15 @@ namespace naudio
         // Check if sound is already loaded
         for (const auto& [id, soundData] : mSounds)
         {
-            if (soundData.filePath == filePath && soundData.isLoaded)
+            if (soundData && soundData->filePath == filePath && soundData->isLoaded)
             {
                 std::cout << "[INFO] Sound already loaded: " << filePath << " (ID: " << id << ")" << std::endl;
                 return id;
             }
         }
 
-        SoundData soundData;
-        soundData.filePath = filePath;
-        soundData.isLoaded = false;
-        soundData.isPlaying = false;
+        auto soundData = std::make_unique<SoundData>();
+        soundData->filePath = filePath;
 
         ma_result result = ma_sound_init_from_file(
             mEngine,
@@ -67,7 +65,7 @@ namespace naudio
             MA_SOUND_FLAG_DECODE,  // Decode immediately for lower latency
             NULL,
             NULL,
-            &soundData.sound
+            &soundData->sound
         );
 
         if (result != MA_SUCCESS)
@@ -77,13 +75,13 @@ namespace naudio
         }
 
         // Set default 3D audio properties
-        ma_sound_set_attenuation_model(&soundData.sound, ma_attenuation_model_inverse);
-        ma_sound_set_min_distance(&soundData.sound, 1.0f);
-        ma_sound_set_max_distance(&soundData.sound, 100.0f);
-        ma_sound_set_volume(&soundData.sound, 1.0f);
-        ma_sound_set_looping(&soundData.sound, MA_FALSE);
+        ma_sound_set_attenuation_model(&soundData->sound, ma_attenuation_model_inverse);
+        ma_sound_set_min_distance(&soundData->sound, 1.0f);
+        ma_sound_set_max_distance(&soundData->sound, 100.0f);
+        ma_sound_set_volume(&soundData->sound, 1.0f);
+        ma_sound_set_looping(&soundData->sound, MA_FALSE);
 
-        soundData.isLoaded = true;
+        soundData->isLoaded = true;
 
         int soundId = mNextSoundId++;
         mSounds[soundId] = std::move(soundData);
@@ -94,28 +92,16 @@ namespace naudio
 
     void AudioSystem::unload(int soundId)
     {
-        SoundData* soundData = get_sound(soundId);
-        if (!soundData) return;
+        auto it = mSounds.find(soundId);
+        if (it == mSounds.end()) return;
 
-        if (soundData->isLoaded)
-        {
-            ma_sound_uninit(&soundData->sound);
-            std::cout << "[INFO] Unloaded sound ID: " << soundId << std::endl;
-        }
-
-        mSounds.erase(soundId);
+        std::cout << "[INFO] Unloaded sound ID: " << soundId << std::endl;
+        mSounds.erase(it);  // unique_ptr destructor handles ma_sound_uninit
     }
 
     void AudioSystem::unload_all()
     {
-        for (auto& [id, soundData] : mSounds)
-        {
-            if (soundData.isLoaded)
-            {
-                ma_sound_uninit(&soundData.sound);
-            }
-        }
-        mSounds.clear();
+        mSounds.clear();  // unique_ptr destructors handle ma_sound_uninit
         std::cout << "[INFO] Unloaded all sounds" << std::endl;
     }
 
@@ -247,7 +233,7 @@ namespace naudio
         {
             return nullptr;
         }
-        return &it->second;
+        return it->second.get();
     }
 
     const SoundData* AudioSystem::get_sound(int soundId) const
@@ -257,6 +243,6 @@ namespace naudio
         {
             return nullptr;
         }
-        return &it->second;
+        return it->second.get();
     }
 } // namespace naudio
