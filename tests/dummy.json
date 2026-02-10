@@ -16,7 +16,7 @@
             "id": "node1",
             "type": "audio",
             "position": [0, 1, 0],
-            "file": "audio/sample1.wav",
+            "file": "/tests/sound-sample-1.wav",
             "properties": {
                 "volume": 0.8,
                 "pan": -0.5
@@ -26,7 +26,7 @@
             "id": "node2",
             "type": "audio",
             "position": [0, 0, 1],
-            "file": "audio/sample2.wav",
+            "file": "/tests/sound-sample-1.wav",
             "properties": {
                 "volume": 0.6,
                 "pan": 0.5

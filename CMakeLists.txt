@@ -67,3 +67,46 @@ add_custom_command(TARGET 3D_Audio_Mixer POST_BUILD
         ${CMAKE_SOURCE_DIR}/lib/libglfw.3.4.dylib
         $<TARGET_FILE_DIR:3D_Audio_Mixer>/../lib
 )
+
+
+# =============================================================================
+# Unit Tests
+# =============================================================================
+enable_testing()
+
+add_executable(3D_Audio_Mixer_Tests
+    tests/test_main.cc
+
+    # Sound tests
+    tests/sound/test_audio_system.cc
+    tests/sound/test_audio_context.cc
+    tests/sound/test_sound_node.cc
+
+    # Element tests
+    tests/elements/test_camera.cc
+    tests/elements/test_listener.cc
+
+    # Scene tests
+    tests/scene/test_scene_loader.cc
+
+    # UI logic tests
+    tests/ui/test_ui_logic.cc
+
+    # Sources needed for tests
+    src/3d_audio_mixer/audio/audio_system.cc
+    src/3d_audio_mixer/audio/audio_context.cc
+)
+
+if(APPLE)
+    target_compile_definitions(3D_Audio_Mixer_Tests PRIVATE GL_SILENCE_DEPRECATION)
+endif()
+
+target_include_directories(3D_Audio_Mixer_Tests PRIVATE
+    ${CMAKE_SOURCE_DIR}/dependencies
+    ${CMAKE_SOURCE_DIR}/dependencies/doctest
+    ${CMAKE_SOURCE_DIR}/dependencies/MiniAudio
+    ${CMAKE_SOURCE_DIR}/dependencies/glm
+    ${CMAKE_SOURCE_DIR}/src/3d_audio_mixer
+)
+
+add_test(NAME AllTests COMMAND 3D_Audio_Mixer_Tests WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})

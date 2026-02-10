@@ -63,6 +63,7 @@
         "atomic": "cpp",
         "*.in": "cpp",
         "numeric": "cpp",
-        "fstream": "cpp"
+        "fstream": "cpp",
+        "iomanip": "cpp"
     }
 }
