@@ -14,6 +14,8 @@ add_executable(3D_Audio_Mixer
     src/3d_audio_mixer/render/opengl_buffer_manager.cc
     src/3d_audio_mixer/render/opengl_context.cc
     src/3d_audio_mixer/render/ui_context.cc
+    src/3d_audio_mixer/audio/audio_context.cc
+    src/3d_audio_mixer/audio/audio_system.cc
     src/3d_audio_mixer/shader/shader.cc
     src/3d_audio_mixer/app/application.cc
     src/3d_audio_mixer/window/window.cc
@@ -21,6 +23,7 @@ add_executable(3D_Audio_Mixer
     # panels
     src/3d_audio_mixer/ui/menu_panel.cc
     src/3d_audio_mixer/ui/scene_view.cc
+    src/3d_audio_mixer/ui/node_info.cc
 
     ${CMAKE_SOURCE_DIR}/dependencies/imgui/imgui.cpp
     ${CMAKE_SOURCE_DIR}/dependencies/imgui/imgui_draw.cpp
@@ -40,6 +43,7 @@ target_include_directories(3D_Audio_Mixer PRIVATE
     ${CMAKE_SOURCE_DIR}/dependencies
     ${CMAKE_SOURCE_DIR}/dependencies/imgui
     ${CMAKE_SOURCE_DIR}/dependencies/imgui/backends
+    ${CMAKE_SOURCE_DIR}/dependencies/MiniAudio
     ${CMAKE_SOURCE_DIR}/src/3d_audio_mixer
 )
 

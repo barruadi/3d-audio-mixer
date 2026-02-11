@@ -7,6 +7,7 @@ namespace nelement
     class Element
     {
         public:
+            virtual ~Element() = default;
             virtual void update(nshader::Shader* shader) = 0;
     };
 } // namespace nelement

@@ -79,9 +79,9 @@ namespace nutils
 
                     auto sn = std::make_shared<nelement::SoundNode>();
 
-                    // set values
-                    sn->self_update(file, glm::vec3(x, y, z), volume, pan);
+                    // initialize sound node
                     sn->init();
+                    sn->self_update(file, glm::vec3(x, y, z), volume, pan);
 
                     sound_nodes->push_back(sn);
                 }
