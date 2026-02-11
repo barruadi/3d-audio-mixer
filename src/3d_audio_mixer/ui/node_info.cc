@@ -7,7 +7,10 @@ namespace nui
     {
         ImGui::Begin("Node Info");
 
-        if (mCurrentNode)
+        // Lock the weak_ptr to get a shared_ptr for safe access
+        auto node = mCurrentNode.lock();
+
+        if (node)
         {
             // Display node information
             ImGui::Text("Sound Node Information");
@@ -20,7 +23,7 @@ namespace nui
 
             if (ImGui::Button("Play Sound"))
             {
-                mCurrentNode->play_sound();
+                node->play_sound();
             }
         }
         else
@@ -32,13 +35,13 @@ namespace nui
 
         // File Browser
         mFileDialog.Display();
-        if (mFileDialog.HasSelected() && mCurrentNode)
+        if (mFileDialog.HasSelected() && node)
         {
             std::string selectedFile = mFileDialog.GetSelected().string();
 
-            mCurrentNode->set_engine(naudio::get_audio_context());
-            mCurrentNode->set_file(selectedFile);
-            mCurrentNode->load_sound();
+            node->set_engine(naudio::get_audio_context());
+            node->set_file(selectedFile);
+            node->load_sound();
 
             mFileDialog.ClearSelected();
         }

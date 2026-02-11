@@ -12,17 +12,16 @@ namespace nui
     {
         private:
             ImGui::FileBrowser mFileDialog;
-            nelement::SoundNode* mCurrentNode;
+            std::weak_ptr<nelement::SoundNode> mCurrentNode;
 
         public:
-            NodeInfo():
-                mCurrentNode(nullptr)
+            NodeInfo()
             {
                 mFileDialog.SetTitle("Select a file");
                 mFileDialog.SetFileFilters({ ".wav" });
             }
 
-            void set_current_node(nelement::SoundNode* node)
+            void set_current_node(const std::shared_ptr<nelement::SoundNode>& node)
             {
                 mCurrentNode = node;
             }

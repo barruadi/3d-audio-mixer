@@ -17,8 +17,8 @@ namespace nui
 
             // Scene objects
             std::unique_ptr<nelement::Grid> mGrid;
-            std::unique_ptr<nelement::Camera> mCamera;
-            std::vector<std::unique_ptr<nelement::SoundNode>> mSoundNodes;
+            std::shared_ptr<nelement::Camera> mCamera;
+            std::vector<std::shared_ptr<nelement::SoundNode>> mSoundNodes;
             
             // framebuffer
             std::unique_ptr<nrender::OpenGL_FrameBuffer> mFrameBuffer;
@@ -33,12 +33,12 @@ namespace nui
                 mSoundNodes()
             {
                 mGrid = std::make_unique<nelement::Grid>();
-                mCamera = std::make_unique<nelement::Camera>();
                 mFrameBuffer = std::make_unique<nrender::OpenGL_FrameBuffer>();
                 mFrameBuffer->create_buffers(800, 600);
 
                 mShader = std::make_unique<nshader::Shader>();
                 mShader->load("shaders/node_vert.shader", "shaders/node_frag.shader");
+                mCamera = std::make_shared<nelement::Camera>();
             }
 
             ~SceneView()
@@ -53,8 +53,8 @@ namespace nui
             // [TODO]: make universal in case of other format
             bool load_scene(nlohmann::json data);
 
-            void set_scene(std::unique_ptr<nelement::Camera> camera,
-                           std::vector<std::unique_ptr<nelement::SoundNode>> sound_nodes)
+            void set_scene(std::shared_ptr<nelement::Camera> camera,
+                           std::vector<std::shared_ptr<nelement::SoundNode>> sound_nodes)
             {
                 mCamera = std::move(camera);
                 mSoundNodes = std::move(sound_nodes);
@@ -74,12 +74,10 @@ namespace nui
             void on_mouse_move(double x, double y, nelement::EInputButton button);
             void on_mouse_wheel(double delta);
 
-            nelement::SoundNode* get_random_node()
+            std::shared_ptr<nelement::SoundNode> get_node(size_t index = 0)
             {
-                if (mSoundNodes.empty()) return nullptr;
-
-                // For simplicity, return the first node
-                return mSoundNodes[0].get();
+                if (index >= mSoundNodes.size()) return nullptr;
+                return mSoundNodes[index];
             }
     };
 } // namespace nui
