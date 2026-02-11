@@ -42,6 +42,10 @@ namespace nelement
                 mAudioSystem.shutdown();
             }
 
+            // Prevent copying - AudioSystem contains non-copyable ma_sound resources
+            SoundNode(const SoundNode&) = delete;
+            SoundNode& operator=(const SoundNode&) = delete;
+
             void init()
             {
                 mVertexBuffer = std::make_shared<nrender::OpenGL_VertexIndexBuffer>();

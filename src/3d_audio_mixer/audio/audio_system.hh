@@ -26,6 +26,10 @@ namespace naudio
             AudioSystem();
             ~AudioSystem();
 
+            // Prevent copying - ma_sound resources cannot be shallow-copied
+            AudioSystem(const AudioSystem&) = delete;
+            AudioSystem& operator=(const AudioSystem&) = delete;
+
             // Main Functions
             void attach_engine(ma_engine* engine);
             void update(const glm::vec3& position);
