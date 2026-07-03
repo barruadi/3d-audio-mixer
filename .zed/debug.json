@@ -1,0 +1,12 @@
+// Project-local debug tasks
+//
+// For more documentation on how to configure debug tasks,
+// see: https://zed.dev/docs/debugger
+[
+  {
+    "adapter": "CodeLLDB",
+    "label": "Debug current C++ file",
+    "program": "bin/3D_Audio_Mixer",
+    "request": "launch",
+  }
+]

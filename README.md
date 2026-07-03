@@ -3,6 +3,25 @@ will be an open-source 3D audio mixer designed for creators, developers, and mus
 
 <br/>
 
+## Build & Run
+
+Prerequisites: CMake (>= 3.26) and Ninja (`brew install cmake ninja`). GLFW is bundled in `lib/`, everything else is vendored in `dependencies/`. Currently macOS only.
+
+```bash
+# Configure (first time only)
+mkdir -p build && cd build && cmake .. -G Ninja
+
+# Build / rebuild
+cd build && ninja
+
+# Run (from the project root)
+./build/bin/3D_Audio_Mixer
+```
+
+Note: run the app from the project root — shaders are loaded via the relative path `src/shaders/`.
+
+<br/>
+
 ## Future Technology Usage
 
 | Layer                | Library/Tool           |
