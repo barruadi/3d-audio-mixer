@@ -12,6 +12,7 @@ namespace nelement
     {
         private:
             std::string mFile;
+            std::string mName;
 
             // properties
             glm::vec3 mPosition;
@@ -29,6 +30,7 @@ namespace nelement
         public:
             SoundNode()
                 : mFile("")
+                , mName("node")
                 , mPosition(0.0f, 0.0f, 0.0f)
                 , mVolume(1.0f)
                 , mPan(0.0f)
@@ -109,6 +111,7 @@ namespace nelement
                     mAudioSystem.set_position(mSoundId, mPosition);
                     mAudioSystem.set_volume(mSoundId, mVolume);
                     mAudioSystem.set_looping(mSoundId, mLooping);
+                    mAudioSystem.set_pan(mSoundId, mPan);
                 }
             }
 
@@ -173,6 +176,20 @@ namespace nelement
                 }
             }
 
+            void set_name(const std::string& name)
+            {
+                mName = name;
+            }
+
+            void set_pan(float pan)
+            {
+                mPan = pan;
+                if (mSoundId != -1)
+                {
+                    mAudioSystem.set_pan(mSoundId, mPan);
+                }
+            }
+
             void set_looping(bool looping)
             {
                 mLooping = looping;
@@ -195,6 +212,16 @@ namespace nelement
             const std::string& get_file_path() const
             {
                 return mFile;
+            }
+
+            const std::string& get_name() const
+            {
+                return mName;
+            }
+
+            float get_pan() const
+            {
+                return mPan;
             }
 
             ma_engine* get_engine() const
