@@ -37,7 +37,7 @@ namespace nui
                 mFrameBuffer->create_buffers(800, 600);
 
                 mShader = std::make_unique<nshader::Shader>();
-                mShader->load("shaders/node_vert.shader", "shaders/node_frag.shader");
+                mShader->load("src/shaders/node_vert.shader", "src/shaders/node_frag.shader");
                 mCamera = std::make_shared<nelement::Camera>();
             }
 
