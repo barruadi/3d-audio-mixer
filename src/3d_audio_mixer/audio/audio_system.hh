@@ -50,6 +50,7 @@ namespace naudio
             void set_position(int soundId, const glm::vec3& position);
             void set_volume(int soundId, float volume);
             void set_looping(int soundId, bool looping);
+            void set_pan(int soundId, float pan);
             void set_pitch(int soundId, float pitch);
             void set_min_distance(int soundId, float distance);
             void set_max_distance(int soundId, float distance);

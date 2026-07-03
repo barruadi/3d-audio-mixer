@@ -83,6 +83,8 @@ namespace nrender
 
     void OpenGL_VertexIndexBuffer::create_buffers(const std::vector<glm::vec3>& nodePosition)
     {
+        if (mVAO) delete_buffers();
+
         glGenVertexArrays(1, &mVAO);
         glGenBuffers(1, &mVBO);
 

@@ -1,5 +1,7 @@
 #include "window/window.hh"
 #include "utils/services.hh"
+#include "utils/scene_loader.hh"
+#include "utils/file_io.hh"
 
 namespace nwindow
 {
@@ -25,6 +27,30 @@ namespace nwindow
             const std::vector<std::shared_ptr<nelement::SoundNode>>& soundNodes)
         {
             mSceneView->set_scene(camera, soundNodes);
+        });
+
+        // Clicking a node in the scene view shows it in the node info panel
+        mSceneView->set_node_selected_callback([this](
+            const std::shared_ptr<nelement::SoundNode>& node)
+        {
+            mNodeInfo->set_current_node(node);
+        });
+
+        // Save writes the current scene state back into the opened JSON file
+        mMenuPanel->set_scene_saver_callback([this](
+            const std::string& path, const nlohmann::json& baseData)
+        {
+            nlohmann::json out = nutils::SceneLoader::serialize_scene(
+                baseData, mSceneView->get_camera(), mSceneView->get_nodes());
+
+            if (nutils::FileIO::write_json(path, out))
+            {
+                std::cout << "[INFO] Scene saved to " << path << std::endl;
+            }
+            else
+            {
+                std::cerr << "[ERROR] Failed to save scene to " << path << std::endl;
+            }
         });
 
         return isRunning;

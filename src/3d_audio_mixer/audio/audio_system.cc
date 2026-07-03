@@ -186,6 +186,14 @@ namespace naudio
         ma_sound_set_looping(&soundData->sound, looping ? MA_TRUE : MA_FALSE);
     }
 
+    void AudioSystem::set_pan(int soundId, float pan)
+    {
+        SoundData* soundData = get_sound(soundId);
+        if (!soundData || !soundData->isLoaded) return;
+
+        ma_sound_set_pan(&soundData->sound, pan);
+    }
+
     void AudioSystem::set_pitch(int soundId, float pitch)
     {
         SoundData* soundData = get_sound(soundId);

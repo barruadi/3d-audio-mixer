@@ -16,6 +16,19 @@ namespace nui
             mFileDialog.Open();
         }
 
+        ImGui::SameLine();
+        if (ImGui::Button("Save"))
+        {
+            if (mCurrentFile.empty())
+            {
+                std::cout << "[INFO] No scene file opened, nothing to save." << std::endl;
+            }
+            else if (mSceneSaverCallback)
+            {
+                mSceneSaverCallback(mCurrentFile, mSceneData);
+            }
+        }
+
         ImGui::End();
 
         // File Browser
@@ -47,6 +60,10 @@ namespace nui
                 {
                     mSceneLoaderCallback(camera, soundNodes);
                 }
+
+                // remember as the save target
+                mCurrentFile = selectedFile;
+                mSceneData = data;
             }
             mFileDialog.ClearSelected();
         }

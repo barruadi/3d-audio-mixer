@@ -1,6 +1,8 @@
 #include "ui/node_info.hh"
 #include "utils/services.hh"
 
+#include <cstdio>
+
 namespace nui
 {
     void NodeInfo::render()
@@ -12,18 +14,60 @@ namespace nui
 
         if (node)
         {
-            // Display node information
             ImGui::Text("Sound Node Information");
-            // [TODO]: Add more detailed information and editable fields
+            ImGui::Separator();
 
+            // name
+            char nameBuf[128];
+            std::snprintf(nameBuf, sizeof(nameBuf), "%s", node->get_name().c_str());
+            if (ImGui::InputText("Name", nameBuf, sizeof(nameBuf)))
+            {
+                node->set_name(nameBuf);
+            }
+
+            // sound file
+            const std::string& file = node->get_file_path();
+            ImGui::Text("File: %s", file.empty() ? "<none>" : file.c_str());
             if (ImGui::Button("Load Sound File"))
             {
                 mFileDialog.Open();
             }
 
+            // properties
+            glm::vec3 position = node->get_position();
+            if (ImGui::DragFloat3("Position", &position.x, 0.05f))
+            {
+                node->set_position(position);
+            }
+
+            float volume = node->get_volume();
+            if (ImGui::SliderFloat("Volume", &volume, 0.0f, 2.0f))
+            {
+                node->set_volume(volume);
+            }
+
+            float pan = node->get_pan();
+            if (ImGui::SliderFloat("Pan", &pan, -1.0f, 1.0f))
+            {
+                node->set_pan(pan);
+            }
+
+            bool looping = node->is_looping();
+            if (ImGui::Checkbox("Looping", &looping))
+            {
+                node->set_looping(looping);
+            }
+
+            ImGui::Separator();
+
             if (ImGui::Button("Play Sound"))
             {
                 node->play_sound();
+            }
+            ImGui::SameLine();
+            if (ImGui::Button("Stop"))
+            {
+                node->stop_sound();
             }
         }
         else

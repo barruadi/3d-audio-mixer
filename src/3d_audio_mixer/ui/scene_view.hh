@@ -5,6 +5,7 @@
 #include "elements/grid.hh"
 #include "render/opengl_buffer_manager.hh"
 #include "shader/shader.hh"
+#include <functional>
 #include <vector>
 #include <nlohmann/json.hpp>
 
@@ -25,6 +26,12 @@ namespace nui
 
             // shader
             std::unique_ptr<nshader::Shader> mShader;
+
+            // selection
+            std::weak_ptr<nelement::SoundNode> mSelectedNode;
+            std::function<void(const std::shared_ptr<nelement::SoundNode>&)> mNodeSelectedCallback;
+
+            void pick_node(const glm::vec2& ndc, float viewportWidth, float viewportHeight);
 
         public:
             SceneView():
@@ -65,6 +72,23 @@ namespace nui
             {
                 mCamera = nullptr;
                 mSoundNodes.clear();
+                mSelectedNode.reset();
+            }
+
+            void set_node_selected_callback(
+                const std::function<void(const std::shared_ptr<nelement::SoundNode>&)>& callback)
+            {
+                mNodeSelectedCallback = callback;
+            }
+
+            std::shared_ptr<nelement::Camera> get_camera() const
+            {
+                return mCamera;
+            }
+
+            const std::vector<std::shared_ptr<nelement::SoundNode>>& get_nodes() const
+            {
+                return mSoundNodes;
             }
 
             // Utils
