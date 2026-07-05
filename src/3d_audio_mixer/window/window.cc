@@ -20,13 +20,32 @@ namespace nwindow
         mMenuPanel = std::make_unique<nui::MenuPanel>();
         mSceneView = std::make_unique<nui::SceneView>();
         mNodeInfo = std::make_unique<nui::NodeInfo>();
+        mTimelinePanel = std::make_unique<nui::TimelinePanel>();
+
+        // Timeline rows always reflect the current scene nodes
+        mTimelinePanel->set_nodes_provider([this]()
+            -> const std::vector<std::shared_ptr<nelement::SoundNode>>&
+        {
+            return mSceneView->get_nodes();
+        });
 
         // Set the scene loader callback - uses shared ownership
         mMenuPanel->set_scene_loader_callback([this](
             const std::shared_ptr<nelement::Camera>& camera,
-            const std::vector<std::shared_ptr<nelement::SoundNode>>& soundNodes)
+            const std::vector<std::shared_ptr<nelement::SoundNode>>& soundNodes,
+            const std::shared_ptr<nelement::Listener>& listener)
         {
-            mSceneView->set_scene(camera, soundNodes);
+            if (listener)
+            {
+                listener->set_engine(naudio::get_audio_context());
+            }
+            // attach the shared engine so playback works without opening
+            // the node info file dialog first
+            for (auto& node : soundNodes)
+            {
+                node->set_engine(naudio::get_audio_context());
+            }
+            mSceneView->set_scene(camera, soundNodes, listener);
         });
 
         // Clicking a node in the scene view shows it in the node info panel
@@ -36,12 +55,19 @@ namespace nwindow
             mNodeInfo->set_current_node(node);
         });
 
+        mSceneView->set_listener_selected_callback([this](
+            const std::shared_ptr<nelement::Listener>& listener)
+        {
+            mNodeInfo->set_current_listener(listener);
+        });
+
         // Save writes the current scene state back into the opened JSON file
         mMenuPanel->set_scene_saver_callback([this](
             const std::string& path, const nlohmann::json& baseData)
         {
             nlohmann::json out = nutils::SceneLoader::serialize_scene(
-                baseData, mSceneView->get_camera(), mSceneView->get_nodes());
+                baseData, mSceneView->get_camera(), mSceneView->get_nodes(),
+                mSceneView->get_listener());
 
             if (nutils::FileIO::write_json(path, out))
             {
@@ -66,6 +92,7 @@ namespace nwindow
         mMenuPanel->render();
         mSceneView->render();
         mNodeInfo->render();
+        mTimelinePanel->render();
 
         // Post-Render
         mUI->post_render();

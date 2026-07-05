@@ -142,4 +142,13 @@ namespace nrender
 
         unbind();
     }
+
+    void OpenGL_VertexIndexBuffer::draw_lines(int first, int count)
+    {
+        bind();
+
+        glDrawArrays(GL_LINES, first, count);
+
+        unbind();
+    }
 } // namespace nrender

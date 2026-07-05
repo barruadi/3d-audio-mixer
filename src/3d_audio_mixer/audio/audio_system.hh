@@ -56,6 +56,11 @@ namespace naudio
             void set_max_distance(int soundId, float distance);
             void set_attenuation(int soundId, ma_attenuation_model model);
 
+            // Timeline
+            float get_cursor_seconds(int soundId);
+            float get_length_seconds(int soundId);
+            void seek_to_second(int soundId, float seconds);
+
             // Getters
             bool is_playing(int soundId) const;
             bool is_loaded(int soundId) const;
