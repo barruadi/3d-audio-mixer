@@ -7,6 +7,7 @@
 #include "ui/menu_panel.hh"
 #include "ui/scene_view.hh"
 #include "ui/node_info.hh"
+#include "ui/timeline_panel.hh"
 
 #include "audio/audio_context.hh"
 
@@ -33,6 +34,7 @@ namespace nwindow
             std::unique_ptr<nui::MenuPanel> mMenuPanel;
             std::unique_ptr<nui::SceneView> mSceneView;
             std::unique_ptr<nui::NodeInfo> mNodeInfo;
+            std::unique_ptr<nui::TimelinePanel> mTimelinePanel;
 
             std::shared_ptr<naudio::AudioContext> mAudioContext;
 
