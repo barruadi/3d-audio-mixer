@@ -1,10 +1,12 @@
 #pragma once
 
 #include "elements/sound_node.hh"
+#include "elements/listener.hh"
 #include "elements/camera.hh"
 #include "elements/grid.hh"
 #include "render/opengl_buffer_manager.hh"
 #include "shader/shader.hh"
+#include "utils/services.hh"
 #include <functional>
 #include <vector>
 #include <nlohmann/json.hpp>
@@ -20,6 +22,7 @@ namespace nui
             std::unique_ptr<nelement::Grid> mGrid;
             std::shared_ptr<nelement::Camera> mCamera;
             std::vector<std::shared_ptr<nelement::SoundNode>> mSoundNodes;
+            std::shared_ptr<nelement::Listener> mListener;
             
             // framebuffer
             std::unique_ptr<nrender::OpenGL_FrameBuffer> mFrameBuffer;
@@ -29,7 +32,9 @@ namespace nui
 
             // selection
             std::weak_ptr<nelement::SoundNode> mSelectedNode;
+            std::weak_ptr<nelement::Listener> mSelectedListener;
             std::function<void(const std::shared_ptr<nelement::SoundNode>&)> mNodeSelectedCallback;
+            std::function<void(const std::shared_ptr<nelement::Listener>&)> mListenerSelectedCallback;
 
             void pick_node(const glm::vec2& ndc, float viewportWidth, float viewportHeight);
 
@@ -61,10 +66,12 @@ namespace nui
             bool load_scene(nlohmann::json data);
 
             void set_scene(std::shared_ptr<nelement::Camera> camera,
-                           std::vector<std::shared_ptr<nelement::SoundNode>> sound_nodes)
+                           std::vector<std::shared_ptr<nelement::SoundNode>> sound_nodes,
+                           std::shared_ptr<nelement::Listener> listener)
             {
                 mCamera = std::move(camera);
                 mSoundNodes = std::move(sound_nodes);
+                mListener = std::move(listener);
                 mIsLoaded = true;
             }
 
@@ -72,13 +79,21 @@ namespace nui
             {
                 mCamera = nullptr;
                 mSoundNodes.clear();
+                mListener = nullptr;
                 mSelectedNode.reset();
+                mSelectedListener.reset();
             }
 
             void set_node_selected_callback(
                 const std::function<void(const std::shared_ptr<nelement::SoundNode>&)>& callback)
             {
                 mNodeSelectedCallback = callback;
+            }
+
+            void set_listener_selected_callback(
+                const std::function<void(const std::shared_ptr<nelement::Listener>&)>& callback)
+            {
+                mListenerSelectedCallback = callback;
             }
 
             std::shared_ptr<nelement::Camera> get_camera() const
@@ -89,6 +104,29 @@ namespace nui
             const std::vector<std::shared_ptr<nelement::SoundNode>>& get_nodes() const
             {
                 return mSoundNodes;
+            }
+
+            std::shared_ptr<nelement::Listener> get_listener() const
+            {
+                return mListener;
+            }
+
+            void add_sound_node()
+            {
+                auto node = std::make_shared<nelement::SoundNode>();
+                node->init();
+                node->set_engine(naudio::get_audio_context());
+                node->set_name("node " + std::to_string(mSoundNodes.size() + 1));
+                mSoundNodes.push_back(node);
+            }
+
+            void add_listener()
+            {
+                if (mListener) return; // engine only drives listener index 0
+
+                mListener = std::make_shared<nelement::Listener>();
+                mListener->init();
+                mListener->set_engine(naudio::get_audio_context());
             }
 
             // Utils
