@@ -19,6 +19,7 @@ namespace nelement
             float mVolume;
             float mPan;
             bool mLooping;
+            bool mLoadFailed;
 
             std::shared_ptr<nrender::OpenGL_VertexIndexBuffer> mVertexBuffer;
 
@@ -35,6 +36,7 @@ namespace nelement
                 , mVolume(1.0f)
                 , mPan(0.0f)
                 , mLooping(false)
+                , mLoadFailed(false)
                 , mSoundId(-1)
             {
             }
@@ -94,6 +96,7 @@ namespace nelement
                     mSoundId = -1;
                 }
                 mFile = file;
+                mLoadFailed = false;
             }
 
             void load_sound()
@@ -106,6 +109,7 @@ namespace nelement
 
                 // Load returns existing ID if already loaded
                 mSoundId = mAudioSystem.load(mFile);
+                mLoadFailed = (mSoundId == -1);
                 if (mSoundId != -1)
                 {
                     mAudioSystem.set_position(mSoundId, mPosition);
@@ -152,6 +156,27 @@ namespace nelement
                 if (mSoundId != -1)
                 {
                     mAudioSystem.resume(mSoundId);
+                }
+            }
+
+            // Timeline
+            float get_cursor_seconds()
+            {
+                if (mSoundId == -1) return 0.0f;
+                return mAudioSystem.get_cursor_seconds(mSoundId);
+            }
+
+            float get_length_seconds()
+            {
+                if (mSoundId == -1) return 0.0f;
+                return mAudioSystem.get_length_seconds(mSoundId);
+            }
+
+            void seek_to_second(float seconds)
+            {
+                if (mSoundId != -1)
+                {
+                    mAudioSystem.seek_to_second(mSoundId, seconds);
                 }
             }
 
@@ -254,6 +279,11 @@ namespace nelement
             bool is_loaded() const
             {
                 return mSoundId != -1;
+            }
+
+            bool has_load_failed() const
+            {
+                return mLoadFailed;
             }
 
             int get_sound_id() const
