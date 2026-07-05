@@ -80,4 +80,10 @@ namespace nshader
 		GLint myLoc = glGetUniformLocation(mProgramId, name.c_str());
 		glUniform1i(myLoc, value);
 	}
+
+    void Shader::set_float(float value, const std::string& name)
+	{
+		GLint myLoc = glGetUniformLocation(mProgramId, name.c_str());
+		glUniform1f(myLoc, value);
+	}
 } // namespace nshader
