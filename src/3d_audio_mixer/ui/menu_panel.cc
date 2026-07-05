@@ -56,9 +56,16 @@ namespace nui
                     return;
                 }
 
+                // falls back to a default listener at origin when missing
+                std::shared_ptr<nelement::Listener> listener;
+                if (!loader.load_listener(&listener))
+                {
+                    std::cout << "[INFO] No listener in scene file, using default." << std::endl;
+                }
+
                 if (mSceneLoaderCallback)
                 {
-                    mSceneLoaderCallback(camera, soundNodes);
+                    mSceneLoaderCallback(camera, soundNodes, listener);
                 }
 
                 // remember as the save target
