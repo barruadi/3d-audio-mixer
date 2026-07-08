@@ -16,6 +16,19 @@ namespace nui
             mFileDialog.Open();
         }
 
+        ImGui::SameLine();
+        if (ImGui::Button("Save"))
+        {
+            if (mCurrentFile.empty())
+            {
+                std::cout << "[INFO] No scene file opened, nothing to save." << std::endl;
+            }
+            else if (mSceneSaverCallback)
+            {
+                mSceneSaverCallback(mCurrentFile, mSceneData);
+            }
+        }
+
         ImGui::End();
 
         // File Browser
@@ -43,10 +56,21 @@ namespace nui
                     return;
                 }
 
+                // falls back to a default listener at origin when missing
+                std::shared_ptr<nelement::Listener> listener;
+                if (!loader.load_listener(&listener))
+                {
+                    std::cout << "[INFO] No listener in scene file, using default." << std::endl;
+                }
+
                 if (mSceneLoaderCallback)
                 {
-                    mSceneLoaderCallback(camera, soundNodes);
+                    mSceneLoaderCallback(camera, soundNodes, listener);
                 }
+
+                // remember as the save target
+                mCurrentFile = selectedFile;
+                mSceneData = data;
             }
             mFileDialog.ClearSelected();
         }

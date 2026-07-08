@@ -1,6 +1,7 @@
 #pragma once
 
 #include "elements/sound_node.hh"
+#include "elements/listener.hh"
 #include "elements/camera.hh"
 #include <nlohmann/json.hpp>
 #include <vector>
@@ -55,6 +56,23 @@ namespace nutils
                 return true;
             }
 
+            bool load_listener(std::shared_ptr<nelement::Listener>* listener)
+            {
+                *listener = std::make_shared<nelement::Listener>();
+                (*listener)->init();
+
+                if (!data.contains("listener") || !data["listener"].is_object()) return false;
+
+                const auto& jlistener = data["listener"];
+
+                float x = 0, y = 0, z = 0;
+                read_vec3(jlistener.value("position", nlohmann::json::array()), x, y, z);
+
+                (*listener)->set_position(glm::vec3(x, y, z));
+
+                return true;
+            }
+
             bool load_sound_nodes(std::vector<std::shared_ptr<nelement::SoundNode>>* sound_nodes)
             {
                 sound_nodes->clear();
@@ -70,22 +88,71 @@ namespace nutils
                     float x = 0, y = 0, z = 0;
                     read_vec3(n.value("position", nlohmann::json::array()), x, y, z);
                     
+                    // empty file is allowed: nodes added in-app may not have
+                    // a sound assigned yet (load_sound guards empty files)
                     std::string file = n.value("file", std::string{});
-                    if (file.empty()) continue;
 
                     const auto& n_props = n.value("properties", nlohmann::json::object());
                     float volume = n_props.value("volume", 1.0f);
                     float pan    = n_props.value("pan", 0.0f);
+                    bool looping = n_props.value("looping", false);
+
+                    std::string name = n.value("name", n.value("id", std::string{"node"}));
 
                     auto sn = std::make_shared<nelement::SoundNode>();
 
                     // initialize sound node
                     sn->init();
                     sn->self_update(file, glm::vec3(x, y, z), volume, pan);
+                    sn->set_name(name);
+                    sn->set_looping(looping);
 
                     sound_nodes->push_back(sn);
                 }
                 return !sound_nodes->empty();
+            }
+
+            // Updates the originally loaded JSON with the current scene state,
+            // preserving fields that are not edited in the app (e.g. listener)
+            static nlohmann::json serialize_scene(nlohmann::json base,
+                const std::shared_ptr<nelement::Camera>& camera,
+                const std::vector<std::shared_ptr<nelement::SoundNode>>& sound_nodes,
+                const std::shared_ptr<nelement::Listener>& listener)
+            {
+                if (camera)
+                {
+                    glm::vec3 p = camera->get_position();
+                    base["camera"]["position"] = { p.x, p.y, p.z };
+                }
+
+                if (listener)
+                {
+                    glm::vec3 p = listener->get_position();
+                    base["listener"]["position"] = { p.x, p.y, p.z };
+                }
+
+                nlohmann::json jnodes = nlohmann::json::array();
+                for (const auto& n : sound_nodes)
+                {
+                    glm::vec3 p = n->get_position();
+
+                    nlohmann::json jn;
+                    jn["id"]       = n->get_name();
+                    jn["name"]     = n->get_name();
+                    jn["type"]     = "audio";
+                    jn["position"] = { p.x, p.y, p.z };
+                    jn["file"]     = n->get_file_path();
+                    jn["properties"] = {
+                        { "volume",  n->get_volume() },
+                        { "pan",     n->get_pan() },
+                        { "looping", n->is_looping() }
+                    };
+
+                    jnodes.push_back(jn);
+                }
+                base["nodes"] = jnodes;
+
+                return base;
             }
     };
 } // namespace nutils

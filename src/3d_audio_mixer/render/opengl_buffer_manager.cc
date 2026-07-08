@@ -83,6 +83,8 @@ namespace nrender
 
     void OpenGL_VertexIndexBuffer::create_buffers(const std::vector<glm::vec3>& nodePosition)
     {
+        if (mVAO) delete_buffers();
+
         glGenVertexArrays(1, &mVAO);
         glGenBuffers(1, &mVBO);
 
@@ -137,6 +139,15 @@ namespace nrender
         bind();
 
         glDrawArrays(GL_LINES, 0, 6);
+
+        unbind();
+    }
+
+    void OpenGL_VertexIndexBuffer::draw_lines(int first, int count)
+    {
+        bind();
+
+        glDrawArrays(GL_LINES, first, count);
 
         unbind();
     }

@@ -186,6 +186,14 @@ namespace naudio
         ma_sound_set_looping(&soundData->sound, looping ? MA_TRUE : MA_FALSE);
     }
 
+    void AudioSystem::set_pan(int soundId, float pan)
+    {
+        SoundData* soundData = get_sound(soundId);
+        if (!soundData || !soundData->isLoaded) return;
+
+        ma_sound_set_pan(&soundData->sound, pan);
+    }
+
     void AudioSystem::set_pitch(int soundId, float pitch)
     {
         SoundData* soundData = get_sound(soundId);
@@ -216,6 +224,34 @@ namespace naudio
         if (!soundData || !soundData->isLoaded) return;
 
         ma_sound_set_attenuation_model(&soundData->sound, model);
+    }
+
+    float AudioSystem::get_cursor_seconds(int soundId)
+    {
+        SoundData* soundData = get_sound(soundId);
+        if (!soundData || !soundData->isLoaded) return 0.0f;
+
+        float cursor = 0.0f;
+        ma_sound_get_cursor_in_seconds(&soundData->sound, &cursor);
+        return cursor;
+    }
+
+    float AudioSystem::get_length_seconds(int soundId)
+    {
+        SoundData* soundData = get_sound(soundId);
+        if (!soundData || !soundData->isLoaded) return 0.0f;
+
+        float length = 0.0f;
+        ma_sound_get_length_in_seconds(&soundData->sound, &length);
+        return length;
+    }
+
+    void AudioSystem::seek_to_second(int soundId, float seconds)
+    {
+        SoundData* soundData = get_sound(soundId);
+        if (!soundData || !soundData->isLoaded) return;
+
+        ma_sound_seek_to_second(&soundData->sound, seconds);
     }
 
     bool AudioSystem::is_playing(int soundId) const

@@ -13,15 +13,24 @@ namespace nelement
             std::shared_ptr<nrender::OpenGL_VertexIndexBuffer> mVertexBuffer;
 
         public:
+            // vertices per axis: shaft (2) + arrowhead lines at the positive tip (4)
+            static constexpr int cVerticesPerAxis = 6;
+
             Grid()
             {
                 mPosition = {
-                    { -2.0f,  0.0f,  0.0f },
-                    {  2.0f,  0.0f,  0.0f },
-                    {  0.0f, -2.0f,  0.0f },
-                    {  0.0f,  2.0f,  0.0f },
-                    {  0.0f,  0.0f, -2.0f },
-                    {  0.0f,  0.0f,  2.0f }
+                    // X axis
+                    { -2.0f,  0.0f,  0.0f }, {  2.0f,  0.0f,  0.0f },
+                    {  2.0f,  0.0f,  0.0f }, {  1.8f,  0.12f, 0.0f },
+                    {  2.0f,  0.0f,  0.0f }, {  1.8f, -0.12f, 0.0f },
+                    // Y axis
+                    {  0.0f, -2.0f,  0.0f }, {  0.0f,  2.0f,  0.0f },
+                    {  0.0f,  2.0f,  0.0f }, {  0.12f, 1.8f,  0.0f },
+                    {  0.0f,  2.0f,  0.0f }, { -0.12f, 1.8f,  0.0f },
+                    // Z axis
+                    {  0.0f,  0.0f, -2.0f }, {  0.0f,  0.0f,  2.0f },
+                    {  0.0f,  0.0f,  2.0f }, {  0.12f, 0.0f,  1.8f },
+                    {  0.0f,  0.0f,  2.0f }, { -0.12f, 0.0f,  1.8f }
                 };
                 init();
             }
@@ -34,7 +43,12 @@ namespace nelement
 
             virtual void render()
             {
-                mVertexBuffer->draw_line();
+                mVertexBuffer->draw_lines(0, static_cast<int>(mPosition.size()));
+            }
+
+            void render_axis(int axis)
+            {
+                mVertexBuffer->draw_lines(axis * cVerticesPerAxis, cVerticesPerAxis);
             }
 
             void update(nshader::Shader* shader)

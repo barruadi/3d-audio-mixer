@@ -41,5 +41,7 @@ namespace nrender
             void draw() override;
 
             void draw_line();
+
+            void draw_lines(int first, int count);
     };
 } // namespace nrender

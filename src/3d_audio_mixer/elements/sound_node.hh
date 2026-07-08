@@ -12,12 +12,14 @@ namespace nelement
     {
         private:
             std::string mFile;
+            std::string mName;
 
             // properties
             glm::vec3 mPosition;
             float mVolume;
             float mPan;
             bool mLooping;
+            bool mLoadFailed;
 
             std::shared_ptr<nrender::OpenGL_VertexIndexBuffer> mVertexBuffer;
 
@@ -29,10 +31,12 @@ namespace nelement
         public:
             SoundNode()
                 : mFile("")
+                , mName("node")
                 , mPosition(0.0f, 0.0f, 0.0f)
                 , mVolume(1.0f)
                 , mPan(0.0f)
                 , mLooping(false)
+                , mLoadFailed(false)
                 , mSoundId(-1)
             {
             }
@@ -92,6 +96,7 @@ namespace nelement
                     mSoundId = -1;
                 }
                 mFile = file;
+                mLoadFailed = false;
             }
 
             void load_sound()
@@ -104,11 +109,13 @@ namespace nelement
 
                 // Load returns existing ID if already loaded
                 mSoundId = mAudioSystem.load(mFile);
+                mLoadFailed = (mSoundId == -1);
                 if (mSoundId != -1)
                 {
                     mAudioSystem.set_position(mSoundId, mPosition);
                     mAudioSystem.set_volume(mSoundId, mVolume);
                     mAudioSystem.set_looping(mSoundId, mLooping);
+                    mAudioSystem.set_pan(mSoundId, mPan);
                 }
             }
 
@@ -152,6 +159,27 @@ namespace nelement
                 }
             }
 
+            // Timeline
+            float get_cursor_seconds()
+            {
+                if (mSoundId == -1) return 0.0f;
+                return mAudioSystem.get_cursor_seconds(mSoundId);
+            }
+
+            float get_length_seconds()
+            {
+                if (mSoundId == -1) return 0.0f;
+                return mAudioSystem.get_length_seconds(mSoundId);
+            }
+
+            void seek_to_second(float seconds)
+            {
+                if (mSoundId != -1)
+                {
+                    mAudioSystem.seek_to_second(mSoundId, seconds);
+                }
+            }
+
             // Setters
             void set_position(const glm::vec3& position)
             {
@@ -170,6 +198,20 @@ namespace nelement
                 if (mSoundId != -1)
                 {
                     mAudioSystem.set_volume(mSoundId, mVolume);
+                }
+            }
+
+            void set_name(const std::string& name)
+            {
+                mName = name;
+            }
+
+            void set_pan(float pan)
+            {
+                mPan = pan;
+                if (mSoundId != -1)
+                {
+                    mAudioSystem.set_pan(mSoundId, mPan);
                 }
             }
 
@@ -195,6 +237,16 @@ namespace nelement
             const std::string& get_file_path() const
             {
                 return mFile;
+            }
+
+            const std::string& get_name() const
+            {
+                return mName;
+            }
+
+            float get_pan() const
+            {
+                return mPan;
             }
 
             ma_engine* get_engine() const
@@ -227,6 +279,11 @@ namespace nelement
             bool is_loaded() const
             {
                 return mSoundId != -1;
+            }
+
+            bool has_load_failed() const
+            {
+                return mLoadFailed;
             }
 
             int get_sound_id() const
