@@ -1,5 +1,6 @@
 # 3d-audio-mixer
-will be an open-source 3D audio mixer designed for creators, developers, and musicians to intuitively position and mix sounds in a virtual 3D space. 
+
+An open-source 3D audio mixer for creators, developers, and musicians to intuitively position and mix sounds in a virtual 3D space.
 
 <br/>
 
@@ -22,97 +23,92 @@ Note: run the app from the project root — shaders are loaded via the relative 
 
 <br/>
 
-## Future Technology Usage
+## Tests
 
-| Layer                | Library/Tool           |
-| -------------------- | ---------------------- |
-| UI                   | ImGui / GLAD           |
-| 3D Viewport          | OpenGL                 |
-| Math                 | glm                    |
-| 3D Audio             | FMOD                   |
-| Audio File Loading   | libsndfile / dr\_wav   |
-| Scene Graph          | Custom + nlohmann      |
-| Window/Input         | GLFW / SDL2            |
-| Asset & Project Save | std::filesystem + JSON |
-| Mixer / Timeline     | ImGui tables / JUCE    |
+Tests use [Google Test](https://github.com/google/googletest), fetched automatically by CMake on first configure. No extra install required.
 
-__\* Still Approximations \*__
+```bash
+# Configure (first time only — downloads GoogleTest)
+mkdir -p build && cd build && cmake .. -G Ninja
+
+# Build tests
+cd build && ninja 3D_Audio_Mixer_Tests
+
+# Run all tests with pass/fail summary
+cd build && ctest --output-on-failure
+
+# Run test binary directly for full GTest output
+./build/bin/3D_Audio_Mixer_Tests --gtest_color=yes
+```
+
+Test files live in `src/test/` mirroring the source structure and use `.test.cc` extension:
+
+```
+src/test/
+├── elements/
+│   ├── camera.test.cc
+│   ├── listener.test.cc
+│   └── sound_node.test.cc
+└── utils/
+    ├── file_io.test.cc
+    └── scene_loader.test.cc
+```
 
 <br/>
 
-## Overall Project Structure
+## Claude Agents
 
-```sh
-*
+Three sub-agents are defined in `.claude/agents/` for common workflows:
+
+| Agent | Invocation | Purpose |
+|-------|-----------|---------|
+| `test-writer` | `@.claude/agents/test-writer.md` | Write and validate GTest unit tests |
+| `reviewer` | `@.claude/agents/reviewer.md` | Review code changes for correctness and style |
+| `commit` | `@.claude/agents/commit.md` | Commit following the COMMITS.md conventions |
+
+<br/>
+
+## Current Technology Stack
+
+| Layer | Library/Tool |
+|---|---|
+| UI | ImGui / GLAD |
+| 3D Viewport | OpenGL |
+| Math | GLM |
+| 3D Audio (real-time) | MiniAudio |
+| Scene Graph | Custom + nlohmann/json |
+| Window/Input | GLFW |
+| Asset & Project Save | std::filesystem + JSON |
+| Unit Testing | Google Test (GTest) |
+
+<br/>
+
+## Project Structure
+
+```
+3d-audio-mixer/
 ├── CMakeLists.txt
-├── main.cc
-│
-├── assets/
-│   └── sounds/
-│
-├── build/
-│
+├── CLAUDE.md
+├── COMMITS.md
 ├── src/
-│   └──3d_audio_mixer
-│       ├── app/
-│       │   ├── application.hhh/.cc
-│       │   └── main.cc
-│       │
-│       ├── ui/
-│       │   ├── ui_layer.cc
-│       │   ├── docking_layout.cc
-│       │   ├── properties_panel.cc
-│       │   └── timeline_panel.cc
-│       │
-│       ├── render/
-│       │   ├── renderer.hh/.cc
-│       │   ├── camera.hh/.cc
-│       │   ├── viewport.cc
-│       │   └── gizmo.hh/.cc
-│       │
-│       ├── elements/
-│       │   ├── listener.hh/.cc
-│       │   ├── audio_node.hh/.cc
-│       │   └── <future>
-│       │
-│       ├── audio/
-│       │   ├── audio_engine.hh/.cc
-│       │   ├── audio_source.hh/.cc
-│       │   ├── listener.hh/.cc
-│       │   ├── mixer.hh/.cc
-│       │   └── audio_file_loader.hh/.cc
-│       │
-│       ├── window/
-│       │   ├── window.hh/.cc
-│       │   └── iwindow.hh
-│       │
-│       ├── core/
-│       │   ├── scene.hh/.cc
-│       │   ├── entity.hh/.cc
-│       │   ├── transform.hh/.cc
-│       │   └── component.hh/.cc
-│       │
-│       ├── utils/
-│       │   ├── file_io.hh/.cc
-│       │   ├── json_serializer.hh/.cc
-│       │   ├── logger.hh/.cc
-│       │   └── math_utils.hh/.cc
-│       │
-│       └── platform/
-│           ├── window.hh/.cc
-│           └── input.hh/.cc
-│
-├── include/
-│   └── <future>
-│
-├── external/
-│   ├── glfw/
-│   ├── glad/
-│   ├── imgui/
-│   ├── glm/
-│   ├── openal-soft/
-│   └── nlohmann_json/
-│
-└── shaders/
-    └── basic_shader.glsl
+│   ├── main.cc
+│   ├── glad.c
+│   ├── shaders/
+│   │   ├── node_frag.shader
+│   │   └── node_vert.shader
+│   ├── 3d_audio_mixer/
+│   │   ├── app/          — Application singleton + PCH
+│   │   ├── audio/        — AudioContext (ma_engine) + AudioSystem (ma_sound)
+│   │   ├── elements/     — Camera, Grid, Listener, SoundNode
+│   │   ├── render/       — OpenGL buffer + frame buffer managers
+│   │   ├── shader/       — Shader load/compile/link
+│   │   ├── ui/           — ImGui panels (SceneView, MenuPanel, NodeInfo, TimelinePanel)
+│   │   ├── utils/        — FileIO, SceneLoader, Services
+│   │   └── window/       — GLFW window wrapper
+│   └── test/
+│       ├── elements/     — camera, listener, sound_node tests
+│       └── utils/        — file_io, scene_loader tests
+├── dependencies/         — vendored: glad, GLFW, GLM, ImGui, MiniAudio, nlohmann
+├── lib/                  — libglfw.3.4.dylib
+└── build/                — cmake output (gitignored)
 ```
