@@ -29,6 +29,35 @@ namespace nui
             }
         }
 
+        ImGui::SameLine();
+        if (mIsRendering)
+        {
+            ImGui::BeginDisabled();
+            ImGui::Button("Rendering...");
+            ImGui::EndDisabled();
+        }
+        else if (ImGui::Button("Render Scene"))
+        {
+            if (mRenderCallback)
+            {
+                mIsRendering = true;
+                std::string outputPath = "render.wav";
+                if (!mCurrentFile.empty())
+                {
+                    // Put render output next to the scene file
+                    std::string dir = mCurrentFile.substr(0, mCurrentFile.find_last_of("/\\") + 1);
+                    outputPath = dir + "render.wav";
+                }
+                mRenderCallback(outputPath);
+                mIsRendering = false;
+                std::cout << "[INFO] Render complete: " << outputPath << std::endl;
+            }
+            else
+            {
+                std::cerr << "[ERROR] No render callback set" << std::endl;
+            }
+        }
+
         ImGui::End();
 
         // File Browser

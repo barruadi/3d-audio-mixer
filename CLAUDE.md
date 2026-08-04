@@ -18,7 +18,15 @@ cd build && ninja
 
 Build system uses CMake with the Ninja generator (`-G Ninja` is required; the default generator on macOS is Unix Makefiles). Output binary goes to `build/bin/`. Never run `cmake` in the project root — an in-source `CMakeCache.txt` breaks subsequent configures in `build/`.
 
-There is no test target yet; `tests/` only holds sample audio/scene data files.
+```bash
+# Build and run tests
+cd build && ninja 3D_Audio_Mixer_Tests && ctest --output-on-failure
+
+# Full GTest output
+./build/bin/3D_Audio_Mixer_Tests --gtest_color=yes
+```
+
+GoogleTest is fetched automatically by CMake via FetchContent — no manual install. The test binary links against OpenGL and MiniAudio but runs headless; tests must not call any GL functions or initialize audio devices. Test files live in `src/test/` mirroring `src/3d_audio_mixer/` and use `.test.cc` extension.
 
 ## Architecture Overview
 
@@ -64,3 +72,15 @@ Application (singleton)
 - Header guards use `#pragma once`
 - Smart pointers: `shared_ptr` for shared ownership, `unique_ptr` for exclusive
 - Logging: `std::cout` for info, `std::cerr` for errors with `[INFO]`/`[ERROR]` prefixes
+
+## Sub-Agents
+
+Three Claude Code sub-agents are defined in `.claude/agents/`:
+
+| File | Purpose |
+|------|---------|
+| `test-writer.md` | Write GTest unit tests in `src/test/`, build, iterate until all pass |
+| `reviewer.md` | Review any code diff for correctness, style, resource safety |
+| `commit.md` | Stage and commit following `COMMITS.md` format and atomicity rules |
+
+Reference an agent in a prompt with `@.claude/agents/<name>.md`. Commit format: `[<type>] <description>` (see `COMMITS.md` for types and examples).
