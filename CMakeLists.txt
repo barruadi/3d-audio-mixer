@@ -1,6 +1,10 @@
 cmake_minimum_required(VERSION 3.26)
 project(3D_Audio_Mixer VERSION 1.0.0)
 
+# ── OpenAL Soft (HRTF + EFX + loopback rendering) ────────────────────────────
+list(APPEND CMAKE_PREFIX_PATH "/opt/homebrew/opt/openal-soft")
+find_package(OpenAL REQUIRED CONFIG)
+
 # ── Google Test ──────────────────────────────────────────────────────────────
 include(FetchContent)
 FetchContent_Declare(
@@ -28,6 +32,7 @@ add_executable(3D_Audio_Mixer
     src/3d_audio_mixer/render/ui_context.cc
     src/3d_audio_mixer/audio/audio_context.cc
     src/3d_audio_mixer/audio/audio_system.cc
+    src/3d_audio_mixer/audio/spatial_engine.cc
     src/3d_audio_mixer/shader/shader.cc
     src/3d_audio_mixer/app/application.cc
     src/3d_audio_mixer/window/window.cc
@@ -58,6 +63,7 @@ target_include_directories(3D_Audio_Mixer PRIVATE
     ${CMAKE_SOURCE_DIR}/dependencies/imgui/backends
     ${CMAKE_SOURCE_DIR}/dependencies/MiniAudio
     ${CMAKE_SOURCE_DIR}/src/3d_audio_mixer
+    /opt/homebrew/opt/openal-soft/include
 )
 
 
@@ -70,6 +76,7 @@ set_target_properties(3D_Audio_Mixer PROPERTIES
 target_link_libraries(3D_Audio_Mixer PRIVATE
     ${CMAKE_SOURCE_DIR}/lib/libglfw.3.4.dylib
     OpenGL::GL
+    OpenAL::OpenAL
 )
 
 
@@ -78,6 +85,7 @@ add_executable(3D_Audio_Mixer_Tests
     src/glad.c
     src/3d_audio_mixer/audio/audio_system.cc
     src/3d_audio_mixer/audio/audio_context.cc
+    src/3d_audio_mixer/audio/spatial_engine.cc
     src/3d_audio_mixer/render/opengl_buffer_manager.cc
     src/3d_audio_mixer/shader/shader.cc
 
@@ -86,6 +94,8 @@ add_executable(3D_Audio_Mixer_Tests
     src/test/elements/listener.test.cc
     src/test/utils/file_io.test.cc
     src/test/utils/scene_loader.test.cc
+    src/test/audio/spatial_engine.test.cc
+    src/test/audio/spatial_engine_integration.test.cc
 )
 
 target_include_directories(3D_Audio_Mixer_Tests PRIVATE
@@ -94,12 +104,18 @@ target_include_directories(3D_Audio_Mixer_Tests PRIVATE
     ${CMAKE_SOURCE_DIR}/dependencies/imgui
     ${CMAKE_SOURCE_DIR}/dependencies/imgui/backends
     ${CMAKE_SOURCE_DIR}/dependencies/MiniAudio
+    /opt/homebrew/opt/openal-soft/include
+)
+
+target_compile_definitions(3D_Audio_Mixer_Tests PRIVATE
+    TEST_AUDIO_DIR="${CMAKE_SOURCE_DIR}/tests"
 )
 
 target_link_libraries(3D_Audio_Mixer_Tests PRIVATE
     GTest::gtest_main
     ${CMAKE_SOURCE_DIR}/lib/libglfw.3.4.dylib
     OpenGL::GL
+    OpenAL::OpenAL
 )
 
 if(APPLE)

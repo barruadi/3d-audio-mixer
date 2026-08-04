@@ -10,6 +10,7 @@
 #include "ui/timeline_panel.hh"
 
 #include "audio/audio_context.hh"
+#include "audio/spatial_engine.hh"
 
 #include <GLFW/glfw3.h>
 
@@ -37,6 +38,7 @@ namespace nwindow
             std::unique_ptr<nui::TimelinePanel> mTimelinePanel;
 
             std::shared_ptr<naudio::AudioContext> mAudioContext;
+            naudio::SpatialEngine mSpatialEngine;
 
         public:
             Window(): isRunning(true), mWindow(nullptr)

@@ -85,5 +85,11 @@ namespace nelement
             {
                 return mPosition;
             }
+
+            // Listener facing direction — matches the hardcoded value in apply_to_engine.
+            glm::vec3 get_orientation_at() const { return { 0.0f, 0.0f, -1.0f }; }
+
+            // Listener world-up vector — matches the hardcoded value in apply_to_engine.
+            glm::vec3 get_orientation_up() const { return { 0.0f, 1.0f, 0.0f }; }
     };
 } // namespace nelement

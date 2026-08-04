@@ -14,6 +14,7 @@ namespace nwindow
         mRender->init(this);
         mUI->init(this);
         mAudioContext->init();
+        mSpatialEngine.init(true);
         
         naudio::Services::instance().sAudioContext = mAudioContext;
 
@@ -59,6 +60,37 @@ namespace nwindow
             const std::shared_ptr<nelement::Listener>& listener)
         {
             mNodeInfo->set_current_listener(listener);
+        });
+
+        // Render callback: gather current scene, run SpatialEngine offline render
+        mMenuPanel->set_render_callback([this](const std::string& outputPath)
+        {
+            mSpatialEngine.clear_sources();
+
+            const auto& nodes = mSceneView->get_nodes();
+            for (const auto& node : nodes)
+            {
+                if (node && !node->get_file_path().empty())
+                {
+                    mSpatialEngine.add_source(node->to_spatial_source());
+                }
+            }
+
+            const auto& listener = mSceneView->get_listener();
+            if (listener)
+            {
+                mSpatialEngine.set_listener_position(listener->get_position());
+                mSpatialEngine.set_listener_orientation(
+                    listener->get_orientation_at(),
+                    listener->get_orientation_up());
+            }
+
+            // Default render duration: 10 seconds. Future: derive from timeline length.
+            const float kRenderDuration = 10.0f;
+            if (!mSpatialEngine.render_to_wav(outputPath, kRenderDuration))
+            {
+                std::cerr << "[ERROR] Spatial render failed" << std::endl;
+            }
         });
 
         // Save writes the current scene state back into the opened JSON file

@@ -24,6 +24,9 @@ namespace nui
             nlohmann::json mSceneData;
             std::function<void(const std::string& path, const nlohmann::json& baseData)> mSceneSaverCallback;
 
+            std::function<void(const std::string& outputPath)> mRenderCallback;
+            bool mIsRendering = false;
+
         public:
             MenuPanel()
             {
@@ -44,6 +47,12 @@ namespace nui
                 const std::string& path, const nlohmann::json& baseData)>& callback)
             {
                 mSceneSaverCallback = callback;
+            }
+
+            // Callback invoked with the chosen output WAV path when "Render Scene" is clicked.
+            void set_render_callback(const std::function<void(const std::string& outputPath)>& callback)
+            {
+                mRenderCallback = callback;
             }
 
             void render();

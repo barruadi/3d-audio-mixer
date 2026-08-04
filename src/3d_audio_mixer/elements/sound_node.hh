@@ -5,6 +5,7 @@
 
 #include "audio/audio_system.hh"
 #include "audio/audio_context.hh"
+#include "audio/spatial_source.hh"
 
 namespace nelement
 {
@@ -289,6 +290,12 @@ namespace nelement
             int get_sound_id() const
             {
                 return mSoundId;
+            }
+
+            // Returns a snapshot of this node's data for the spatial renderer.
+            naudio::SpatialSource to_spatial_source() const
+            {
+                return { mFile, mPosition, mVolume, mLooping };
             }
     };
 } // namespace nelement
